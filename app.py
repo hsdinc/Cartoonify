@@ -25,10 +25,10 @@ def cartoonify():
 @app.route('/cartoonify', methods=['POST'])
 def upload_image():
     file = request.files['image']
-    extension = file.filename
+    #extension = file.filename
     f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(f)
-    return render_template('cartoonify.html', filename=extension, init=True)
+    return render_template('cartoonify.html', filename=f, init=True)
 
 
 @app.route('/cartoonify/<path:filename>', methods=['GET', 'POST'])
