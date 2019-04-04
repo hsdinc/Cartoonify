@@ -21,7 +21,7 @@
     <a href="{{ url_for('download_image', filename=filename) }}"><button class='btn btn-default'>Download</button></a>
     <br>
     <br>
-    <a href="/cartoonify"><button class='btn btn-default'>Try again!</button></a>
+    <a href="{{ url_for('tryagain', filename=filename) }}"><button class='btn btn-default'>Try again!</button></a>
     {% endif %}
 
 </div>
