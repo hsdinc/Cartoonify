@@ -12,6 +12,9 @@ import dlib
 
 numPoints = 0
 clickedPoints = []
+UPLOAD_FOLDER = os.path.basename('uploads')
+MORPH_FOLDER = os.path.basename('facemorph')
+CARTOON_FOLDER = os.path.join(MORPH_FOLDER, os.path.basename("cartoons"))
 
 # Read points from text file
 def readPoints(path) :
@@ -142,25 +145,24 @@ def click_event(event, x, y, flags, param):
         clickedPoints.append(newPoint)
         numPoints += 1
 
-
-
-def morph(personPic, cartoonPic = "cartoons/anna.jpg"):
+def morph(personPic, cartoonPic = "anna.jpg"):
     # Read images
-    img1 = cv2.imread(personPic)
-    img2 = cv2.imread(cartoonPic)
+    personPath = os.path.join(UPLOAD_FOLDER, personPic)
+    cartoonPath = os.path.join(CARTOON_FOLDER, cartoonPic)
+    img1 = cv2.imread(personPath)
+    img2 = cv2.imread(cartoonPath)
 
     img1 = cv2.resize(img1, (600, 800))
-    cv2.imwrite(personPic, img1)
+    cv2.imwrite(personPath, img1)
     
     cv2.imshow("Original Face", img1)
     cv2.setMouseCallback("Original Face", click_event)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-
     # Find facial landmarks of selfie and create text file of landmark points
-    facialLandmarks(img1, personPic)
-    parse(personPic)
+    facialLandmarks(img1, personPath)
+    parse(personPath)
     
     # Convert Mat to float data type
     img1 = np.float32(img1)
@@ -172,8 +174,8 @@ def morph(personPic, cartoonPic = "cartoons/anna.jpg"):
         alpha = i/100
 
         # Read array of corresponding points
-        points1 = readPoints(personPic + '.txt')
-        points2 = readPoints(cartoonPic + '.txt')
+        points1 = readPoints(personPath + '.txt')
+        points2 = readPoints(cartoonPath + '.txt')
         print(len(points2), len(points1))
         points = []
 
@@ -207,19 +209,22 @@ def morph(personPic, cartoonPic = "cartoons/anna.jpg"):
         finalImage = np.uint8(imgMorph)
         img_array.append(finalImage)
 
+    # Create file names for morph video and gif
+    video_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + "morph.mp4")
+    gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + "morph.gif")
+    
     # Creates mp4 of morphing from person to cartoon
-    out = cv2.VideoWriter('MorphVideo.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 50, (600, 800))
+    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 50, (600, 800))
 
     for i in range(len(img_array)):
         out.write(img_array[i])
         if i == 50:
-            cv2.imshow("Moprhed Image", img_array[i])
+            cv2.imshow("Morphed Image", img_array[i])
             cv2.waitKey(0)
     out.release()
 
     # Creates gif of morphing from mp4
-    clip = (VideoFileClip("MorphVideo.mp4"))
-    filename = "MorphGif.gif"
-    clip.write_gif(filename)
+    clip = (VideoFileClip(video_name))
+    clip.write_gif(gif_name)
 
-    return filename
+    return gif_name

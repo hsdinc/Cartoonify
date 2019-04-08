@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, send_file, after_this_request
-from facemorph.faceMorph import morph
+from faceMorph import morph
 import os
 
 app = Flask(__name__)
@@ -25,10 +25,10 @@ def cartoonify(filename = None):
 
 @app.route('/cartoonify', methods=['POST'])
 def upload_image():
-    file = request.files['image']
-    f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    file.save(f)
-    f = morph(f)
+    image = request.files['image']
+    f = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+    image.save(f)
+    f = morph(image.filename)
     return render_template('cartoonify.html', filename=f, init=True)
 
 
