@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_file, after_this_request
+from facemorph.faceMorph import morph
 import os
 
 app = Flask(__name__)
@@ -27,6 +28,7 @@ def upload_image():
     file = request.files['image']
     f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(f)
+    f = morph(f)
     return render_template('cartoonify.html', filename=f, init=True)
 
 
@@ -36,11 +38,11 @@ def download_image(filename):
     @after_this_request
     def remove_file(response):
         try:
-                print(filename)
-                os.remove(filename)
-                file_handle.close()
+            print(filename)
+            os.remove(filename)
+            file_handle.close()
         except Exception as error:
-                app.logger.error("Error removing or closing downloaded file handle", error)
+            app.logger.error("Error removing or closing downloaded file handle", error)
         return response
     return send_file(filename, as_attachment=True, mimetype='image/jpg')
 
