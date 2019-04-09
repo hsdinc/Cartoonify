@@ -155,14 +155,14 @@ def morph(personPic, cartoonPic = "anna.jpg"):
     img1 = cv2.resize(img1, (600, 800))
     cv2.imwrite(personPath, img1)
     
-    cv2.imshow("Original Face", img1)
-    cv2.setMouseCallback("Original Face", click_event)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow("Original Face", img1)
+    #cv2.setMouseCallback("Original Face", click_event)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
     # Find facial landmarks of selfie and create text file of landmark points
-    facialLandmarks(img1, personPath)
-    parse(personPath)
+    #facialLandmarks(img1, personPath)
+    #parse(personPath)
     
     # Convert Mat to float data type
     img1 = np.float32(img1)
@@ -215,12 +215,12 @@ def morph(personPic, cartoonPic = "anna.jpg"):
     
     # Creates mp4 of morphing from person to cartoon
     out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 50, (600, 800))
-
+    
     for i in range(len(img_array)):
         out.write(img_array[i])
-        if i == 50:
-            cv2.imshow("Morphed Image", img_array[i])
-            cv2.waitKey(0)
+        #if i == 50:
+        #    cv2.imshow("Morphed Image", img_array[i])
+        #    cv2.waitKey(0)
     out.release()
 
     # Creates gif of morphing from mp4
