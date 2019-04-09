@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<script src="/static/js/jquery-3.1.1.js"></script>
+
+<div class="jumbotron text-center">
+    <h1>Cartoonify</h1>
+
+    <h1>Click on the image to mark the points in the form below!</h1>
+    <img src="{{ url_for('add_points_image', filename=filename) }}"></img>
+    <br>
+
+    <h3>Left and right are from the person in the picture's perspective</h3>
+    <form action="/cartoonify" method="post" enctype="multipart/form-data">
+        Left Ear:<br>
+        <input type="text" name="leftear"><br>
+        Neck:<br>
+        <input type="text" name="neck"><br>
+        Right Shoulder:<br>
+        <input type="text" name="rightshoulder"><br>
+        Left Shoulder:<br>
+        <input type="text" name="leftshoulder"><br>
+
+        <input type="submit" value="Confirm points" class="btn btn-primary">
+    </form>
+
+</div>
+
+
+{% endblock %}

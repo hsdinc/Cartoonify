@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, send_file, after_this_request
-from faceMorph import morph
+from faceMorph import createTextFile, morph
 import os
 
 app = Flask(__name__)
@@ -28,34 +28,53 @@ def upload_image():
     image = request.files['image']
     f = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
     image.save(f)
-    f = morph(image.filename)
-    return render_template('cartoonify.html', filename=f, init=True)
 
+    return render_template('addpoints.html', filename=f)
+
+@app.route('/addpoints', methods=['POST'])
+def add_points(filename):
+    # Find extra points from form
+    extraPoints = []
+    extraPoints += [request.form['leftear']]
+    extraPoints += [request.form['neck']]
+    extraPoints += [request.form['rightshoulder']]
+    extraPoints += [request.form['leftshoulder']]
+    
+    # Create a text file representing the points to be used for the uploaded picture and morph
+    createTextFile(filename, extraPoints)
+    f = morph(filename)
+
+    return render_template('cartoonify.html', filename = f, init = True)
 
 @app.route('/cartoonify/<path:filename>', methods=['GET', 'POST'])
 def download_image(filename):
     file_handle = open(filename, 'r')
+    text_file_handle = open(filename + ".txt", 'r')
     @after_this_request
     def remove_file(response):
         try:
-            print(filename)
             os.remove(filename)
+            os.remove(filename + ".txt")
             file_handle.close()
+            text_file_handle.close()
         except Exception as error:
-            app.logger.error("Error removing or closing downloaded file handle", error)
+            app.logger.error("Error removing or closing downloaded file handle" + str(error))
         return response
     return send_file(filename, as_attachment=True, mimetype='image/jpg')
 
 @app.route('/cartoonify')
 def tryagain(filename):
     file_handle = open(filename, 'r')
+    text_file_handle = open(filename + ".txt", 'r')
     @after_this_request
     def remove_file(response):
         try:
             os.remove(filename)
+            os.remove(filename + ".txt")
             file_handle.close()
+            text_file_handle.close()
         except Exception as error:
-            app.logger.error("Error removing or closing downloaded file handle", error)
+            app.logger.error("Error removing or closing downloaded file handle" + str(error))
         return response
     return render_template('cartoonify.html', init=True)
 
