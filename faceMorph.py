@@ -155,7 +155,7 @@ def createTextFile(personPic, extraPoints):
     facialLandmarks(img1, personPath, extraPoints)
     parse(personPath)
 
-def morph(personPic, cartoonPic = "anna.jpg"):
+def morph(personPic, cartoonPic = "dora.jpg"):
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     cartoonPath = os.path.join(CARTOON_FOLDER, cartoonPic)
