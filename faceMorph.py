@@ -147,6 +147,11 @@ def click_event(event, x, y, flags, param):
         numPoints += 1
 """
 
+def resizeImage(imagePath):
+    image = cv2.imread(imagePath)
+    image = cv2.resize(image, (600, 800))
+    cv2.imwrite(imagePath, image)
+
 def createTextFile(personPic, extraPoints):
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     img1 = cv2.imread(personPath)
@@ -155,16 +160,13 @@ def createTextFile(personPic, extraPoints):
     facialLandmarks(img1, personPath, extraPoints)
     parse(personPath)
 
-def morph(personPic, cartoonPic = "dora.jpg"):
+def morph(personPic, cartoonPic = "jamie.jpg"):
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     cartoonPath = os.path.join(CARTOON_FOLDER, cartoonPic)
     img1 = cv2.imread(personPath)
     img2 = cv2.imread(cartoonPath)
 
-    img1 = cv2.resize(img1, (600, 800))
-    cv2.imwrite(personPath, img1)
-    
     # Convert Mat to float data type
     img1 = np.float32(img1)
     img2 = np.float32(img2)

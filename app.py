@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, send_file, after_this_request
-from faceMorph import createTextFile, morph
+from faceMorph import resizeImage, createTextFile, morph
 import os
 
 app = Flask(__name__)
@@ -28,6 +28,7 @@ def upload_image():
     image = request.files['image']
     f = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
     image.save(f)
+    resizeImage(f)
 
     return render_template('addpoints.html', filename=f)
 
