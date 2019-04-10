@@ -31,36 +31,40 @@ def upload_image():
 
     return render_template('addpoints.html', filename=f)
 
-@app.route('/addpoints', methods=['POST'])
+@app.route('/addpoints/<path:filename>', methods=['POST'])
 def add_points(filename):
     # Find extra points from form
     extraPoints = []
-    extraPoints += [request.form['leftear']]
-    extraPoints += [request.form['neck']]
-    extraPoints += [request.form['rightshoulder']]
-    extraPoints += [request.form['leftshoulder']]
-    
+    extraPoints += [(int(request.form['leftearX']), int(request.form['leftearY']))]
+    extraPoints += [(int(request.form['neckX']), int(request.form['neckY']))]
+    extraPoints += [(int(request.form['rightshoulderX']), int(request.form['rightshoulderY']))]
+    extraPoints += [(int(request.form['leftshoulderX']), int(request.form['leftshoulderY']))]
+
     # Create a text file representing the points to be used for the uploaded picture and morph
-    createTextFile(filename, extraPoints)
-    f = morph(filename)
+    createTextFile(os.path.basename(filename), extraPoints)
+    f = morph(os.path.basename(filename))
 
     return render_template('cartoonify.html', filename = f, init = True)
 
+@app.route('/addpoints/<path:filename>', methods=['GET'])
+def add_points_image(filename):
+    return send_file(filename, as_attachment=True, mimetype='image/jpg')
+
 @app.route('/cartoonify/<path:filename>', methods=['GET', 'POST'])
 def download_image(filename):
-    file_handle = open(filename, 'r')
-    text_file_handle = open(filename + ".txt", 'r')
-    @after_this_request
-    def remove_file(response):
-        try:
-            os.remove(filename)
-            os.remove(filename + ".txt")
-            file_handle.close()
-            text_file_handle.close()
-        except Exception as error:
-            app.logger.error("Error removing or closing downloaded file handle" + str(error))
-        return response
-    return send_file(filename, as_attachment=True, mimetype='image/jpg')
+    #file_handle = open(filename, 'r')
+    #text_file_handle = open(filename + ".txt", 'r')
+    #@after_this_request
+    #def remove_file(response):
+    #    try:
+    #        os.remove(filename)
+    #        os.remove(filename + ".txt")
+    #        file_handle.close()
+    #        text_file_handle.close()
+    #    except Exception as error:
+    #        app.logger.error("Error removing or closing downloaded file handle" + str(error))
+    #    return response
+    return send_file(filename, as_attachment=True, mimetype='image/gif')
 
 @app.route('/cartoonify')
 def tryagain(filename):
