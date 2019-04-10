@@ -11,15 +11,25 @@
     <br>
 
     <h3>Left and right are from the person in the picture's perspective</h3>
-    <form action="/cartoonify" method="post" enctype="multipart/form-data">
-        Left Ear:<br>
-        <input type="text" name="leftear"><br>
-        Neck:<br>
-        <input type="text" name="neck"><br>
-        Right Shoulder:<br>
-        <input type="text" name="rightshoulder"><br>
-        Left Shoulder:<br>
-        <input type="text" name="leftshoulder"><br>
+    <form action="{{ url_for('add_points', filename=filename) }}" method="post" enctype="multipart/form-data">
+        <span class="btn btn-default btn-file">
+            Left Ear X:<br>
+            <input type="text" name="leftearX"><br>
+            Left Ear Y:<br>
+            <input type="text" name="leftearY"><br>
+            Neck X:<br>
+            <input type="text" name="neckX"><br>
+            Neck Y:<br>
+            <input type="text" name="neckY"><br>
+            Right Shoulder X:<br>
+            <input type="text" name="rightshoulderX"><br>
+            Right Shoulder Y:<br>
+            <input type="text" name="rightshoulderY"><br>
+            Left Shoulder X:<br>
+            <input type="text" name="leftshoulderX"><br>
+            Left Shoulder Y:<br>
+            <input type="text" name="leftshoulderY"><br>
+        </span>
 
         <input type="submit" value="Confirm points" class="btn btn-primary">
     </form>
