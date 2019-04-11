@@ -5,6 +5,9 @@
 
 <div class="jumbotron text-center">
     <h1>Cartoonify</h1>
+    
+    <h2>Click the image below to designate the required points</h2>
+    <canvas id = "points_image" width = "600" height = "800"></canvas>
 
     <h3>Left and right are from the person in the picture's perspective</h3>
     <form id = "points_form" action="{{ url_for('add_points', filename=filename) }}" method="post" enctype="multipart/form-data">
@@ -30,13 +33,17 @@
         <input type="submit" value="Confirm points" class="btn btn-primary">
     </form>    
 
-    <canvas id = "points_image" width = "600" height = "800"></canvas>
+    
     <script language = "Javascript">
         var canvas = document.getElementById("points_image");
+        var context = canvas.getContext('2d');
         var form = document.getElementById("points_form");
 
-        //image = new Image();
-        //image.src = "{{ url_for('add_points', filename = filename)}}"
+        image = new Image();
+        image.src = "{{ url_for('add_points', filename = filename)}}"
+        image.onload = function() {
+            context.drawImage(image, 0, 0);
+        };
 
         canvas.addEventListener('click', function(event) {
             // Get x and y coordinates of click event on canvas
