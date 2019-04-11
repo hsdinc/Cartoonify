@@ -6,37 +6,6 @@
 <div class="jumbotron text-center">
     <h1>Cartoonify</h1>
 
-    <canvas id = "points_image" width = "600" height = "800"></canvas>
-    <script language = "Javascript">
-        var canvas = document.getElementById("points_image");
-        var form = document.getElementById("points_form");
-
-        //image = new Image();
-        //image.src = "{{ url_for('add_points', filename = filename)}}"
-
-        canvas.addEventListener('click', function(event) {
-            // Get x and y coordinates of click event on canvas
-            var x = event.pageX - canvas.offsetLeft;
-            var y = event.pageY - canvas.offsetTop;
-
-            // Find the first empty X and Y input text boxes and complete them
-            for (var i = 0; i < form.elements.length; i++) {
-                textinput = form.elements[i];
-                if (textinput.value === "" && textinput.name.slice(-1) === "X") {
-                    textinput.value = x;
-                    form.elements[i + 1] = y;
-                }
-            }
-        });
-
-    </script>
-
-    <!--
-    <h1>Click on the image to mark the points in the form below!</h1>
-    <img src="{{ url_for('add_points_image', filename=filename) }}"></img>
-    <br>
-    -->
-
     <h3>Left and right are from the person in the picture's perspective</h3>
     <form id = "points_form" action="{{ url_for('add_points', filename=filename) }}" method="post" enctype="multipart/form-data">
         <span class="btn btn-default btn-file">
@@ -59,7 +28,40 @@
         </span>
 
         <input type="submit" value="Confirm points" class="btn btn-primary">
-    </form>
+    </form>    
+
+    <canvas id = "points_image" width = "600" height = "800"></canvas>
+    <script language = "Javascript">
+        var canvas = document.getElementById("points_image");
+        var form = document.getElementById("points_form");
+
+        //image = new Image();
+        //image.src = "{{ url_for('add_points', filename = filename)}}"
+
+        canvas.addEventListener('click', function(event) {
+            // Get x and y coordinates of click event on canvas
+            var x = event.pageX - canvas.offsetLeft;
+            var y = event.pageY - canvas.offsetTop;
+
+            // Find the first empty X and Y input text boxes and complete them
+            for (var i = 0; i < form.elements.length; i++) {
+                textinput = form.elements[i];
+
+                if (textinput.value === "" && textinput.name.slice(-1) === "X") {
+                    textinput.value = x;
+                    form.elements[i + 1].value = y;
+                    break;
+                }
+            }
+        });
+
+    </script>
+
+    <!--
+    <h1>Click on the image to mark the points in the form below!</h1>
+    <img src="{{ url_for('add_points_image', filename=filename) }}"></img>
+    <br>
+    -->
 
 </div>
 
