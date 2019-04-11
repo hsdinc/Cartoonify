@@ -157,7 +157,7 @@ def morph(personPic, cartoonPic = "anna.jpg"):
     
     #cv2.imshow("Original Face", img1)
     #cv2.setMouseCallback("Original Face", click_event)
-    #cv2.waitKey(0)
+    #cv2.waitKey(1)
     #cv2.destroyAllWindows()
 
     # Find facial landmarks of selfie and create text file of landmark points
