@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from imutils import face_utils
-from moviepy.editor import *
+#from moviepy.editor import *
 import numpy as np
 import cv2
 import sys
@@ -233,7 +233,7 @@ def morph(personPic, cartoonPic = "jamie.jpg"):
     out.release()
 
     # Creates gif of morphing from mp4
-    clip = (VideoFileClip(video_name))
-    clip.write_gif(gif_name)
+    #clip = (VideoFileClip(video_name))
+    #clip.write_gif(gif_name)
 
     return gif_name
