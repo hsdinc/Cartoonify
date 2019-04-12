@@ -9,9 +9,10 @@ import os
 import argparse
 import imutils
 import dlib
+import asyncio
 
-numPoints = 0
-clickedPoints = []
+#numPoints = 0
+#clickedPoints = []
 UPLOAD_FOLDER = os.path.basename('uploads')
 MORPH_FOLDER = os.path.basename('facemorph')
 CARTOON_FOLDER = os.path.join(MORPH_FOLDER, os.path.basename("cartoons"))
@@ -80,7 +81,7 @@ def morphTriangle(img1, img2, img, t1, t2, t, alpha) :
     # Copy triangular region of the rectangular patch to the output image
     img[r[1]:r[1]+r[3], r[0]:r[0]+r[2]] = img[r[1]:r[1]+r[3], r[0]:r[0]+r[2]] * ( 1 - mask ) + imgRect * mask
 
-def facialLandmarks(image, fileName):
+def facialLandmarks(image, fileName, clickedPoints):
     # initialize dlib's face detector (HOG-based) and then create
     # the facial landmark predictor
     detector = dlib.get_frontal_face_detector()
@@ -137,6 +138,7 @@ def parse(fileName):
     close.write(" ")
     close.write(period)
 
+"""
 def click_event(event, x, y, flags, param):
     global numPoints
     global clickedPoints
@@ -144,26 +146,28 @@ def click_event(event, x, y, flags, param):
         newPoint = x, y
         clickedPoints.append(newPoint)
         numPoints += 1
+"""
 
-def morph(personPic, cartoonPic = "anna.jpg"):
+def resizeImage(imagePath):
+    image = cv2.imread(imagePath)
+    image = cv2.resize(image, (600, 800))
+    cv2.imwrite(imagePath, image)
+
+def createTextFile(personPic, extraPoints):
+    personPath = os.path.join(UPLOAD_FOLDER, personPic)
+    img1 = cv2.imread(personPath)
+
+    # Find facial landmarks of selfie and create text file of landmark points
+    facialLandmarks(img1, personPath, extraPoints)
+    parse(personPath)
+
+def morph(personPic, cartoonPic = "jamie.jpg"):
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     cartoonPath = os.path.join(CARTOON_FOLDER, cartoonPic)
     img1 = cv2.imread(personPath)
     img2 = cv2.imread(cartoonPath)
 
-    img1 = cv2.resize(img1, (600, 800))
-    cv2.imwrite(personPath, img1)
-    
-    #cv2.imshow("Original Face", img1)
-    #cv2.setMouseCallback("Original Face", click_event)
-    #cv2.waitKey(1)
-    #cv2.destroyAllWindows()
-
-    # Find facial landmarks of selfie and create text file of landmark points
-    #facialLandmarks(img1, personPath)
-    #parse(personPath)
-    
     # Convert Mat to float data type
     img1 = np.float32(img1)
     img2 = np.float32(img2)
@@ -221,6 +225,11 @@ def morph(personPic, cartoonPic = "anna.jpg"):
         #if i == 50:
         #    cv2.imshow("Morphed Image", img_array[i])
         #    cv2.waitKey(0)
+    
+    reversedArray = img_array[::-1]
+    for i in range(len(reversedArray)):
+        out.write(reversedArray[i])
+    
     out.release()
 
     # Creates gif of morphing from mp4
