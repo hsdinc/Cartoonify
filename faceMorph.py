@@ -225,6 +225,11 @@ def morph(personPic, cartoonPic = "jamie.jpg"):
         #if i == 50:
         #    cv2.imshow("Morphed Image", img_array[i])
         #    cv2.waitKey(0)
+    
+    reversedArray = img_array[::-1]
+    for i in range(len(reversedArray)):
+        out.write(reversedArray[i])
+    
     out.release()
 
     # Creates gif of morphing from mp4
