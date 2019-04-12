@@ -161,12 +161,14 @@ def createTextFile(personPic, extraPoints):
     facialLandmarks(img1, personPath, extraPoints)
     parse(personPath)
 
-def morph(personPic, cartoonPic = "jamie.jpg"):
+def morph(personPic, cartoonPic = "shrek.jpg"):
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     cartoonPath = os.path.join(CARTOON_FOLDER, cartoonPic)
     img1 = cv2.imread(personPath)
     img2 = cv2.imread(cartoonPath)
+
+    print(cartoonPath)
 
     # Convert Mat to float data type
     img1 = np.float32(img1)
@@ -233,7 +235,7 @@ def morph(personPic, cartoonPic = "jamie.jpg"):
     out.release()
 
     # Creates gif of morphing from mp4
-    #clip = (VideoFileClip(video_name))
-    #clip.write_gif(gif_name)
+    clip = (VideoFileClip(video_name))
+    clip.write_gif(gif_name)
 
     return gif_name
