@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from imutils import face_utils
-#from moviepy.editor import *
+from moviepy.editor import *
 import numpy as np
 import cv2
 import sys
