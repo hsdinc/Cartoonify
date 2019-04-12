@@ -1,3 +1,6 @@
+# Morph videos/gifs
+*.gif
+*.mp4
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
