@@ -2,6 +2,9 @@
 *.gif
 *.mp4
 
+# Model file
+shape_predictor_68_face_landmarks.dat
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
