@@ -85,4 +85,4 @@ def tryagain(filename):
 
 
 if __name__ == '__main__':
-    application.run(debug=True, host = "https://cartoonify121.herokuapp.com/")
+    application.run(debug=True)
