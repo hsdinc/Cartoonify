@@ -18,7 +18,7 @@ docutils==0.14
 Flask==1.0.2
 future==0.16.0
 idna==2.7
-imageio==2.5.0
+imageio==2.4.1
 imageio-ffmpeg==0.2.0
 imutils==0.5.2
 itsdangerous==1.1.0
