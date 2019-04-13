@@ -1,1 +1,1 @@
-release: python application.py
+web gunicorn manage:application
