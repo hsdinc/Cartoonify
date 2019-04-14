@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, after_this_request
+from flask import Flask, render_template, request, send_file, after_this_request, Response
 from faceMorph import resizeImage, createTextFile, morph
 import os
 
@@ -10,8 +10,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
-        return render_template('home.html')
-
+    return render_template('home.html')
 
 @app.route('/about')
 def about():
@@ -45,7 +44,11 @@ def add_points(filename):
     createTextFile(os.path.basename(filename), extraPoints)
     f = morph(os.path.basename(filename))
 
-    return render_template('cartoonify.html', filename = f, init = True)
+    if f[-4:] == ".gif":
+        return render_template('cartoonify.html', filename = f, init = True)
+    
+    else:
+        return Response(f, mimetype='text/html')
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):
