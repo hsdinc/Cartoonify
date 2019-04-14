@@ -45,7 +45,7 @@ def add_points(filename):
     createTextFile(os.path.basename(filename), extraPoints)
     #f = morph(os.path.basename(filename))
 
-    return Response(morph(os.path.basename(filename)), "text/http")
+    return Response(morph(os.path.basename(filename)), mimetype = "text/http")
     #return render_template('cartoonify.html', filename = f, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
