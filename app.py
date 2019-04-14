@@ -42,16 +42,13 @@ def add_points(filename):
 
     # Create a text file representing the points to be used for the uploaded picture and morph
     createTextFile(os.path.basename(filename), extraPoints)
+    f = morph(os.path.basename(filename))
 
-    #f = next(morph(os.path.basename(filename)))
-
-    #while f:
-        #if f[-4:] == ".gif":
-         #   return render_template('cartoonify.html', filename = f, init = True)
+    if f[-4:] == ".gif":
+        return render_template('cartoonify.html', filename = f, init = True)
     
-        #else:
-            #f = next(morph(os.path.basename(filename)))
-    return Response(morph(os.path.basename(filename)), mimetype='text/html')
+    else:
+        return Response(f, mimetype='text/html')
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):
@@ -91,4 +88,4 @@ def tryagain(filename):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host = "ec2-54-193-120-97.us-west-1.compute.amazonaws.com")
+    app.run(debug=True)
