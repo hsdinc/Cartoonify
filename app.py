@@ -43,9 +43,10 @@ def add_points(filename):
 
     # Create a text file representing the points to be used for the uploaded picture and morph
     createTextFile(os.path.basename(filename), extraPoints)
-    f = morph(os.path.basename(filename))
+    #f = morph(os.path.basename(filename))
 
-    return render_template('cartoonify.html', filename = f, init = True)
+    return Response(morph(os.path.basename(filename)), "text/http")
+    #return render_template('cartoonify.html', filename = f, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):

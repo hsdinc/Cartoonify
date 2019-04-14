@@ -180,61 +180,57 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
 
     img_array = []
 
-    for i in range(0, 100):
-        alpha = i/100
-
-        # Read array of corresponding points
-        points1 = readPoints(personPath + '.txt')
-        points2 = readPoints(cartoonPath + '.txt')
-        print(len(points2), len(points1))
-        points = []
-
-        # Compute weighted average point coordinates
-        for j in range(0, len(points2)):
-            x = ( 1 - alpha ) * points1[j][0] + alpha * points2[j][0]
-            y = ( 1 - alpha ) * points1[j][1] + alpha * points2[j][1]
-            points.append((x,y))
-
-
-        # Allocate space for final output
-        imgMorph = np.zeros(img1.shape, dtype = img1.dtype)
-
-        # Read triangles from tri.txt
-        with open("tri_orig.txt") as file :
-            for line in file :
-                x,y,z = line.split()
-                
-                x = int(x)
-                y = int(y)
-                z = int(z)
-
-                t1 = [points1[x], points1[y], points1[z]]
-                t2 = [points2[x], points2[y], points2[z]]
-                t = [ points[x], points[y], points[z] ]
-
-                # Morph one triangle at a time.
-                morphTriangle(img1, img2, imgMorph, t1, t2, t, alpha)
-
-        # Display Result
-        finalImage = np.uint8(imgMorph)
-        img_array.append(finalImage)
-
     # Create file names for morph video and gif
     video_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + "morph.mp4")
     gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + "morph.gif")
     
     # Creates mp4 of morphing from person to cartoon
     out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 50, (600, 800))
-    
-    for i in range(len(img_array)):
-        out.write(img_array[i])
-        #if i == 50:
-        #    cv2.imshow("Morphed Image", img_array[i])
-        #    cv2.waitKey(0)
-    
-    reversedArray = img_array[::-1]
-    for i in range(len(reversedArray)):
-        out.write(reversedArray[i])
+
+    for i in range(0, 200):
+        if i < 100:
+            alpha = i/100
+
+            # Read array of corresponding points
+            points1 = readPoints(personPath + '.txt')
+            points2 = readPoints(cartoonPath + '.txt')
+            print(len(points2), len(points1))
+            points = []
+
+            # Compute weighted average point coordinates
+            for j in range(0, len(points2)):
+                x = ( 1 - alpha ) * points1[j][0] + alpha * points2[j][0]
+                y = ( 1 - alpha ) * points1[j][1] + alpha * points2[j][1]
+                points.append((x,y))
+
+
+            # Allocate space for final output
+            imgMorph = np.zeros(img1.shape, dtype = img1.dtype)
+
+            # Read triangles from tri.txt
+            with open("tri_orig.txt") as file :
+                for line in file :
+                    x,y,z = line.split()
+                    
+                    x = int(x)
+                    y = int(y)
+                    z = int(z)
+
+                    t1 = [points1[x], points1[y], points1[z]]
+                    t2 = [points2[x], points2[y], points2[z]]
+                    t = [ points[x], points[y], points[z] ]
+
+                    # Morph one triangle at a time.
+                    morphTriangle(img1, img2, imgMorph, t1, t2, t, alpha)
+
+            # Display Result
+            finalImage = np.uint8(imgMorph)
+            img_array.append(finalImage)
+
+            out.write(finalImage)
+
+        else: 
+            out.write(img_array[199 - i])
     
     out.release()
 
