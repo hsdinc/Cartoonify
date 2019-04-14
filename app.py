@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, after_this_request
+from flask import Flask, render_template, request, send_file, after_this_request, Response
 from faceMorph import resizeImage, createTextFile, morph
 import os
 
