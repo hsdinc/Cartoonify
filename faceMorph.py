@@ -186,8 +186,7 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
         # Read array of corresponding points
         points1 = readPoints(personPath + '.txt')
         points2 = readPoints(cartoonPath + '.txt')
-        yield "Generated image " + str(i + 1) + "out of 100"
-        print(len(points1), len(points2))
+        print(len(points2), len(points1))
         points = []
 
         # Compute weighted average point coordinates
