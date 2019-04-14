@@ -34,7 +34,6 @@ proglog==0.1.9
 python-dateutil==2.8.0
 PyYAML==3.13
 requests==2.20.1
-rq
 semantic-version==2.5.0
 six==1.11.0
 termcolor==1.1.0
