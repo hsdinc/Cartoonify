@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, send_file, after_this_request
 from faceMorph import resizeImage, createTextFile, morph
 import os
+from rq import Queue
+from worker import conn
+
+q = Queue(connection=conn)
 
 app = Flask(__name__)
 
@@ -43,7 +47,7 @@ def add_points(filename):
 
     # Create a text file representing the points to be used for the uploaded picture and morph
     createTextFile(os.path.basename(filename), extraPoints)
-    f = morph(os.path.basename(filename))
+    f = q.enqueue(morph, os.path.basename(filename)) 
 
     return render_template('cartoonify.html', filename = f, init = True)
 
