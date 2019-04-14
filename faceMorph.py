@@ -231,6 +231,9 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
 
         else: 
             out.write(img_array[199 - i])
+
+        # Yield a status update
+        yield "Created frame " + str(i) + " out of 200\n"
     
     out.release()
 
@@ -238,4 +241,4 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
     clip = (VideoFileClip(video_name))
     clip.write_gif(gif_name)
 
-    return gif_name
+    yield gif_name
