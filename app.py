@@ -1,29 +1,26 @@
-from flask import Flask, render_template, request, send_file, after_this_request, Response
+from flask import Flask, render_template, request, send_file, after_this_request, Response, stream_with_context
 from faceMorph import resizeImage, createTextFile, morph
 import os
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = os.path.basename('uploads')
+MORPH_FOLDER = os.path.basename('facemorph')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 @app.route('/')
 def index():
-        return render_template('home.html')
-
+    return render_template('home.html')
 
 @app.route('/about')
 def about():
     return render_template('about.html')
 
-
 @app.route('/cartoonify')
 def cartoonify(filename = None):
     return render_template('cartoonify.html')
 
-
-@app.route('/cartoonify', methods=['POST'])
+@app.route('/addpoints', methods=['POST'])
 def upload_image():
     image = request.files['image']
     f = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
@@ -42,11 +39,20 @@ def add_points(filename):
     extraPoints += [(int(request.form['leftshoulderX']), int(request.form['leftshoulderY']))]
 
     # Create a text file representing the points to be used for the uploaded picture and morph
-    createTextFile(os.path.basename(filename), extraPoints)
-    #f = morph(os.path.basename(filename))
+    f = os.path.basename(filename)
+    createTextFile(f, extraPoints)
+    gifname = os.path.join(MORPH_FOLDER, f.split(".")[0] + "morph.gif")
 
-    return Response(morph(os.path.basename(filename)), mimetype = "text/http")
+    return render_template('loading.html', filename = f, gifname = gifname)
     #return render_template('cartoonify.html', filename = f, init = True)
+
+@app.route('/load/<path:filename>')
+def load(filename):
+    return Response(morph(filename), mimetype= 'text/event-stream')
+
+@app.route('/cartoonifyfinished/<path:filename>')
+def show_morph(filename):
+    return render_template('cartoonify.html', filename = filename, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):

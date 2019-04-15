@@ -3,7 +3,7 @@
 from imutils import face_utils
 import imageio
 
-imageio.plugins.ffmpeg.download()
+#imageio.plugins.ffmpeg.download()
 
 from moviepy.editor import *
 import numpy as np
@@ -13,7 +13,6 @@ import os
 import argparse
 import imutils
 import dlib
-import asyncio
 
 #numPoints = 0
 #clickedPoints = []
@@ -53,7 +52,6 @@ def morphTriangle(img1, img2, img, t1, t2, t, alpha) :
     r1 = cv2.boundingRect(np.float32([t1]))
     r2 = cv2.boundingRect(np.float32([t2]))
     r = cv2.boundingRect(np.float32([t]))
-
 
     # Offset points by left top corner of the respective rectangles
     t1Rect = []
@@ -178,6 +176,7 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
     img1 = np.float32(img1)
     img2 = np.float32(img2)
 
+    # Create an array for the morph images
     img_array = []
 
     # Create file names for morph video and gif
@@ -223,17 +222,18 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
                     # Morph one triangle at a time.
                     morphTriangle(img1, img2, imgMorph, t1, t2, t, alpha)
 
-            # Display Result
+            # Create result and write to output mp4
             finalImage = np.uint8(imgMorph)
             img_array.append(finalImage)
 
             out.write(finalImage)
 
         else: 
+            # Write frames in reverse to output
             out.write(img_array[199 - i])
 
         # Yield a status update
-        yield "Created frame " + str(i) + " out of 200\n"
+        yield "data:" + str(i + 1) + "\n\n"
     
     out.release()
 
@@ -241,4 +241,4 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
     clip = (VideoFileClip(video_name))
     clip.write_gif(gif_name)
 
-    yield gif_name
+    yield "data:stop\n\n"
