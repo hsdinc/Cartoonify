@@ -202,7 +202,6 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
                 y = ( 1 - alpha ) * points1[j][1] + alpha * points2[j][1]
                 points.append((x,y))
 
-
             # Allocate space for final output
             imgMorph = np.zeros(img1.shape, dtype = img1.dtype)
 
