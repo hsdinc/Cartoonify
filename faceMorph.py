@@ -186,7 +186,7 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
     # Creates mp4 of morphing from person to cartoon
     out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 50, (600, 800))
 
-    for i in range(0, 200):
+    for i in range(0, 100):
         if i < 100:
             alpha = i/100
 
