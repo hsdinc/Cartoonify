@@ -153,7 +153,6 @@ def click_event(event, x, y, flags, param):
 def resizeImage(imagePath):
     image = cv2.imread(imagePath)
     image = cv2.resize(image, (600, 800))
-    cv2.imshow("image", image)
     cv2.imwrite(imagePath, image)
 
 def createTextFile(personPic, extraPoints):
