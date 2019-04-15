@@ -3,7 +3,7 @@
 from imutils import face_utils
 import imageio
 
-imageio.plugins.ffmpeg.download()
+#imageio.plugins.ffmpeg.download()
 
 from moviepy.editor import *
 import numpy as np
@@ -18,7 +18,7 @@ import dlib
 #clickedPoints = []
 UPLOAD_FOLDER = os.path.basename('uploads')
 MORPH_FOLDER = os.path.basename('facemorph')
-CARTOON_FOLDER = os.path.join(MORPH_FOLDER, os.path.basename("cartoons"))
+CARTOON_FOLDER = os.path.basename("static")
 
 # Read points from text file
 def readPoints(path) :
@@ -166,7 +166,7 @@ def createTextFile(personPic, extraPoints):
 def morph(personPic, cartoonPic = "shrek.jpg"):
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
-    cartoonPath = os.path.join(CARTOON_FOLDER, cartoonPic)
+    cartoonPath = os.path.join(os.path.join(CARTOON_FOLDER, os.path.basename("images")), cartoonPic)
     img1 = cv2.imread(personPath)
     img2 = cv2.imread(cartoonPath)
 
@@ -180,8 +180,9 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
     img_array = []
 
     # Create file names for morph video and gif
-    video_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + "morph.mp4")
-    gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + "morph.gif")
+    video_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.mp4")
+    gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.gif")
+
     
     # Creates mp4 of morphing from person to cartoon
     out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 50, (600, 800))
@@ -192,8 +193,8 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
 
             # Read array of corresponding points
             points1 = readPoints(personPath + '.txt')
-            points2 = readPoints(cartoonPath + '.txt')
-            print(len(points2), len(points1))
+            points2 = readPoints(os.path.join(os.path.join(CARTOON_FOLDER, os.path.basename("text")), cartoonPic) + '.txt')
+            #print(len(points2), len(points1))
             points = []
 
             # Compute weighted average point coordinates

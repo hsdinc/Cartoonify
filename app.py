@@ -41,14 +41,26 @@ def add_points(filename):
     # Create a text file representing the points to be used for the uploaded picture and morph
     f = os.path.basename(filename)
     createTextFile(f, extraPoints)
-    gifname = os.path.join(MORPH_FOLDER, f.split(".")[0] + "morph.gif")
 
-    return render_template('loading.html', filename = f, gifname = gifname)
-    #return render_template('cartoonify.html', filename = f, init = True)
+    return render_template('choosecartoon.html', filename = filename)
 
-@app.route('/load/<path:filename>')
-def load(filename):
-    return Response(morph(filename), mimetype= 'text/event-stream')
+@app.route('/choosecartoon/<path:filename>', methods=['GET'])
+def choosecartoon_start(filename):
+    images = os.listdir(os.path.join(app.static_folder, "images"))
+    return send_file(filename, as_attachment=True, mimetype='image/jpg')
+
+@app.route('/choosecartoon/<path:filename>', methods=['POST'])
+def choosecartoon(filename):
+    cartoon = request.form['cartoon']
+   
+    f = os.path.basename(filename)
+    gifname = os.path.join(MORPH_FOLDER, f.split(".")[0] + cartoon.split(".")[0] + "morph.gif")
+
+    return render_template('loading.html', filename = f, cartoonname = cartoon, gifname = gifname)
+
+@app.route('/load/<path:filename>/<path:cartoonname>')
+def load(filename, cartoonname):
+    return Response(morph(filename, cartoonname), mimetype= 'text/event-stream')
 
 @app.route('/cartoonifyfinished/<path:filename>')
 def show_morph(filename):

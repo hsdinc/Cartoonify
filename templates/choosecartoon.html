@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<style>
+/* HIDE RADIO */
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+  outline: 7px solid #f00;
+}
+</style>
+
+
+<div class="jumbotron text-center">
+  <h1>Choose a Cartoon</h1>
+  <div style="overflow-x:auto;">
+    <form id = "cartoon_form" action="{{ url_for('choosecartoon', filename=filename) }}" method="post" enctype="multipart/form-data">
+            <label>
+                <input type="radio" name="cartoon" value="aladdin.jpg" checked>
+                <img src= "{{ url_for('static', filename='images/' + 'aladdin.jpg') }}" height="400" width="300">
+            </label>
+                
+            <label>
+                <input type="radio" name="cartoon" value="anna.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'anna.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="danny.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'danny.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="dash.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'dash.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="dora.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'dora.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="elastigirl.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'elastigirl.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="jimmy.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'jimmy.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="mulan.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'mulan.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="spongebob.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'spongebob.jpg') }}" height="400" width="300">
+            </label>
+
+            <label>
+                <input type="radio" name="cartoon" value="shrek.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'shrek.jpg') }}" height="400" width="300">
+            </label>
+            <label>
+                <input type="radio" name="cartoon" value="tiana.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'tiana.jpg') }}" height="400" width="300">
+            </label>
+            <label>
+                <input type="radio" name="cartoon" value="edna.jpg">
+                <img src= "{{ url_for('static', filename='images/' + 'edna.jpg') }}" height="400" width="300">
+            </label>
+        
+        </div>
+            <!-- <input type="submit" value="Submit!" /> -->
+            <p style = "padding-top: 30px"></p><button class="btn btn-primary btn-lg" type="submit">Next</button></p>
+    </form>
+</div>
+<section class="row">
+{% endblock %}
