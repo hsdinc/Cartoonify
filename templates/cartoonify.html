@@ -6,14 +6,25 @@
 <div class="jumbotron text-center">
     {% if init %}
         <div id = "morph_completed">
-            <h1>Here is your morphed picture!</h1>
-            <img src="{{ url_for('download_image', filename=filename) }}"></img>
+            <h1>Here is your morph!</h1>
+            <h3>Morphed gif:</h3>
+            <img src="{{ url_for('download_file', filename=gifname) }}"></img>
             <br>
             <br>
-            <a href="{{ url_for('download_image', filename=filename) }}"><button class='btn btn-default'>Download</button></a>
+            <h3>Halfway image:</h3>
+            <img src="{{ url_for('download_file', filename=halfwayname)}}"></img>
             <br>
             <br>
-            <a href="{{ url_for('tryagain', filename=filename) }}"><button class='btn btn-default'>Try again!</button></a>
+            <a href="{{ url_for('download_file', filename=videoname) }}"><button class='btn btn-default'>Download .mp4</button></a>
+            <br>
+            <br>
+            <a href="{{ url_for('download_file', filename=gifname) }}"><button class='btn btn-default'>Download GIF</button></a>
+            <br>
+            <br>
+            <a href="{{ url_for('download_file', filename=halfwayname) }}"><button class='btn btn-default'>Download Halfway Image</button></a>
+            <br>
+            <br>
+            <a href="{{ url_for('tryagain', filename=gifname) }}"><button class='btn btn-default'>Try again!</button></a>
         </div>
         
     {% else %}

@@ -163,7 +163,7 @@ def createTextFile(personPic, extraPoints):
     facialLandmarks(img1, personPath, extraPoints)
     parse(personPath)
 
-def morph(personPic, cartoonPic = "shrek.jpg"):
+def morph(personPic, cartoonPic, num_frames):
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     cartoonPath = os.path.join(os.path.join(CARTOON_FOLDER, os.path.basename("images")), cartoonPic)
@@ -182,14 +182,18 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
     # Create file names for morph video and gif
     video_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.mp4")
     gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.gif")
+    halfway_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "halfway.jpg")
 
     
     # Creates mp4 of morphing from person to cartoon
-    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 50, (600, 800))
+    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 20, (600, 800))
 
-    for i in range(0, 100):
-        if i < 100:
-            alpha = i/100
+    # Note the halfway point of the frames
+    halfway_frames = num_frames // 2
+
+    for i in range(0, num_frames):
+        if i < halfway_frames:
+            alpha = i / halfway_frames
 
             # Read array of corresponding points
             points1 = readPoints(personPath + '.txt')
@@ -228,12 +232,16 @@ def morph(personPic, cartoonPic = "shrek.jpg"):
 
             out.write(finalImage)
 
+            # Write the halfway image
+            if i == halfway_frames // 2:
+                cv2.imwrite(halfway_name, finalImage)
+
         else: 
             # Write frames in reverse to output
-            out.write(img_array[199 - i])
+            out.write(img_array[num_frames - 1 - i])
 
         # Yield a status update
-        yield "data:" + str(i + 1) + "\n\n"
+        yield "data:" + str((i + 1) / num_frames * 100) + "\n\n"
     
     out.release()
 

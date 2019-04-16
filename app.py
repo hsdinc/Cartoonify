@@ -4,6 +4,8 @@ import os
 
 app = Flask(__name__)
 
+# NUM_FRAMES is the number of frames to be created for the gif/mp4. Half of these frames will be the morph in reverse
+NUM_FRAMES = 66
 UPLOAD_FOLDER = os.path.basename('uploads')
 MORPH_FOLDER = os.path.basename('facemorph')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -54,24 +56,26 @@ def choosecartoon(filename):
     cartoon = request.form['cartoon']
    
     f = os.path.basename(filename)
+    videoname = os.path.join(MORPH_FOLDER, f.split(".")[0] + cartoon.split(".")[0] + "morph.mp4")
     gifname = os.path.join(MORPH_FOLDER, f.split(".")[0] + cartoon.split(".")[0] + "morph.gif")
+    halfwayname = os.path.join(MORPH_FOLDER, f.split(".")[0] + cartoon.split(".")[0] + "halfway.jpg")
 
-    return render_template('loading.html', filename = f, cartoonname = cartoon, gifname = gifname)
+    return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, gifname = gifname, halfwayname = halfwayname)
 
 @app.route('/load/<path:filename>/<path:cartoonname>')
 def load(filename, cartoonname):
-    return Response(morph(filename, cartoonname), mimetype= 'text/event-stream')
+    return Response(morph(filename, cartoonname, NUM_FRAMES), mimetype= 'text/event-stream')
 
-@app.route('/cartoonifyfinished/<path:filename>')
-def show_morph(filename):
-    return render_template('cartoonify.html', filename = filename, init = True)
+@app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>')
+def show_morph(videoname, gifname, halfwayname):
+    return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):
     return send_file(filename, as_attachment=True, mimetype='image/jpg')
 
 @app.route('/cartoonify/<path:filename>', methods=['GET', 'POST'])
-def download_image(filename):
+def download_file(filename):
     #file_handle = open(filename, 'r')
     #text_file_handle = open(filename + ".txt", 'r')
     #@after_this_request
@@ -84,22 +88,22 @@ def download_image(filename):
     #    except Exception as error:
     #        app.logger.error("Error removing or closing downloaded file handle" + str(error))
     #    return response
-    return send_file(filename, as_attachment=True, mimetype='image/gif')
+    return send_file(filename, as_attachment=True)
 
 @app.route('/cartoonify')
 def tryagain(filename):
-    file_handle = open(filename, 'r')
-    text_file_handle = open(filename + ".txt", 'r')
-    @after_this_request
-    def remove_file(response):
-        try:
-            os.remove(filename)
-            os.remove(filename + ".txt")
-            file_handle.close()
-            text_file_handle.close()
-        except Exception as error:
-            app.logger.error("Error removing or closing downloaded file handle" + str(error))
-        return response
+    #file_handle = open(filename, 'r')
+    #text_file_handle = open(filename + ".txt", 'r')
+    #@after_this_request
+    #def remove_file(response):
+    #    try:
+    #        os.remove(filename)
+    #        os.remove(filename + ".txt")
+    #        file_handle.close()
+    #        text_file_handle.close()
+    #    except Exception as error:
+    #        app.logger.error("Error removing or closing downloaded file handle" + str(error))
+    #    return response
     return render_template('cartoonify.html', init=True)
 
 

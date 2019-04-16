@@ -14,21 +14,26 @@
                 var node = document.createTextNode("Morph images generated! Generating gif!");
                 update_text.appendChild(node);
                 element.appendChild(update_text);
+                $('.progress-bar').css('width', (event.data) + '%').attr('aria-valuenow', event.data);
+                $('.progress-bar-label').text((event.data) +'%');
             }
 
             else if (event.data == "stop"){
                 source.close();
 
                 var finish_link = document.createElement("a");
-                finish_link.href = "{{ url_for('show_morph', filename=gifname) }}";
+                finish_link.href = "{{ url_for('show_morph', videoname=videoname, gifname=gifname, halfwayname=halfwayname) }}";
 
                 var node = document.createTextNode("Proceed to morph");
                 finish_link.appendChild(node);
                 element.appendChild(finish_link);
             }
+
+            else {
+                $('.progress-bar').css('width', (event.data) + '%').attr('aria-valuenow', event.data);
+                $('.progress-bar-label').text((event.data) +'%');
+            }
             
-            $('.progress-bar').css('width', (event.data) + '%').attr('aria-valuenow', event.data);
-            $('.progress-bar-label').text((event.data) +'%');
         }
 	</script>
 </head>
