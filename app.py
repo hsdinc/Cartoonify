@@ -68,6 +68,9 @@ def load(filename, cartoonname):
 
 @app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>')
 def show_morph(videoname, gifname, halfwayname):
+    print(videoname + "\n")
+    print(gifname + "\n")
+    print(halfwayname + "\n")
     return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
