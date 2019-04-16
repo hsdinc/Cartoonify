@@ -56,9 +56,9 @@ def choosecartoon(filename):
     cartoon = request.form['cartoon']
    
     f = os.path.basename(filename)
-    videoname = os.path.join(MORPH_FOLDER, f.split(".")[0] + cartoon.split(".")[0] + "morph.mp4")
-    gifname = os.path.join(MORPH_FOLDER, f.split(".")[0] + cartoon.split(".")[0] + "morph.gif")
-    halfwayname = os.path.join(MORPH_FOLDER, f.split(".")[0] + cartoon.split(".")[0] + "halfway.jpg")
+    videoname = f.split(".")[0] + cartoon.split(".")[0] + "morph.mp4"
+    gifname = f.split(".")[0] + cartoon.split(".")[0] + "morph.gif"
+    halfwayname = f.split(".")[0] + cartoon.split(".")[0] + "halfway.jpg"
 
     return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, gifname = gifname, halfwayname = halfwayname)
 
@@ -68,9 +68,9 @@ def load(filename, cartoonname):
 
 @app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>')
 def show_morph(videoname, gifname, halfwayname):
-    print(videoname + "\n")
-    print(gifname + "\n")
-    print(halfwayname + "\n")
+    videoname = os.path.join(MORPH_FOLDER, videoname)
+    gifname = os.path.join(MORPH_FOLDER, gifname)
+    halfwayname = os.path.join(MORPH_FOLDER, halfwayname)
     return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
