@@ -3,7 +3,11 @@
 from imutils import face_utils
 import imageio
 
-imageio.plugins.ffmpeg.download()
+try:
+    imageio.plugins.ffmpeg.download()
+
+except:
+    pass
 
 from moviepy.editor import *
 import numpy as np
@@ -14,8 +18,6 @@ import argparse
 import imutils
 import dlib
 
-#numPoints = 0
-#clickedPoints = []
 UPLOAD_FOLDER = os.path.basename('uploads')
 MORPH_FOLDER = os.path.basename('facemorph')
 CARTOON_FOLDER = os.path.basename("static")
@@ -139,16 +141,6 @@ def parse(fileName):
     # needed to get one space before start of text to align numbers
     close.write(" ")
     close.write(period)
-
-"""
-def click_event(event, x, y, flags, param):
-    global numPoints
-    global clickedPoints
-    if event == cv2.EVENT_LBUTTONDOWN and numPoints != 4:
-        newPoint = x, y
-        clickedPoints.append(newPoint)
-        numPoints += 1
-"""
 
 def resizeImage(imagePath):
     image = cv2.imread(imagePath)
