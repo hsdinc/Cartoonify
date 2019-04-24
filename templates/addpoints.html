@@ -6,7 +6,29 @@
 <div class="jumbotron text-center">
     <h1>Cartoonify</h1>
     
-    <h2>Click the image below to designate the required points</h2>
+    <h2>Click your image below to designate the following points in this order:</h2>
+    <table class="image" align="center">
+        <tr>
+          <td>
+            <p>Left Ear:</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'hueyRed.jpg') }}" width="250">
+          </td>
+          <td>
+            <p>Neck:</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'hueyBlue.jpg') }}" width="250">
+          </td>
+          <td>
+            <p>Right Shoulder:</p>
+            <img src= "{{ url_for('static', filename='images/' + 'hueyYellow.jpg') }}" width="250">
+          </td>
+          <td>
+            <p>Left Shoulder:</p>
+            <img src= "{{ url_for('static', filename='images/' + 'hueyGreen.jpg') }}" width="250">
+          </td>
+        </tr>
+      </table>
+
+   
     <canvas id = "points_image" width = "600" height = "800"></canvas>
 
     <h3>Left and right are from the person in the picture's perspective</h3>
