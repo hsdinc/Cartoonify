@@ -64,6 +64,24 @@
             </span>
             <input type="submit" value="Upload your image" class="btn btn-primary">
         </form>
+            <h3>Upload a front facing photo (examples below)</h3>
+            <h5>Images work best if they have dimensions 600x800</h5>
+            <table class="image" align="center" width="100%">
+                    <col style="width:33%">
+                    <col style="width:34%">
+                    <col style="width:33%">
+                    <tr>
+                      <td>
+                        <img src= "{{ url_for('static', filename='examples/' + 'huey.jpg') }}" width="250">
+                      </td>
+                      <td>
+                        <img src= "{{ url_for('static', filename='examples/' + 'miguel.jpg') }}" width="250">
+                      </td>
+                      <td>
+                        <img src= "{{ url_for('static', filename='examples/' + 'tiffanyPortrait.jpg') }}" width="250">
+                      </td>
+                    </tr>
+                  </table>
     {% endif %}
 </div>
 
