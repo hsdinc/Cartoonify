@@ -59,19 +59,21 @@ def choosecartoon(filename):
     videoname = f.split(".")[0] + cartoon.split(".")[0] + "morph.mp4"
     gifname = f.split(".")[0] + cartoon.split(".")[0] + "morph.gif"
     halfwayname = f.split(".")[0] + cartoon.split(".")[0] + "halfway.jpg"
+    quartername = f.split(".")[0] + cartoon.split(".")[0] + "quarter.jpg"
 
-    return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, gifname = gifname, halfwayname = halfwayname)
+    return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, gifname = gifname, halfwayname = halfwayname, quartername = quartername)
 
 @app.route('/load/<path:filename>/<path:cartoonname>')
 def load(filename, cartoonname):
     return Response(morph(filename, cartoonname, NUM_FRAMES), mimetype= 'text/event-stream')
 
-@app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>')
-def show_morph(videoname, gifname, halfwayname):
+@app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>/<path:quartername>')
+def show_morph(videoname, gifname, halfwayname, quartername):
     videoname = os.path.join(MORPH_FOLDER, videoname)
     gifname = os.path.join(MORPH_FOLDER, gifname)
     halfwayname = os.path.join(MORPH_FOLDER, halfwayname)
-    return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, init = True)
+    quartername = os.path.join(MORPH_FOLDER, quartername)
+    return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, quartername = quartername, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):

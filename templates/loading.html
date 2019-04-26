@@ -22,7 +22,7 @@
                 source.close();
 
                 var finish_link = document.createElement("a");
-                finish_link.href = "{{ url_for('show_morph', videoname=videoname, gifname=gifname, halfwayname=halfwayname) }}";
+                finish_link.href = "{{ url_for('show_morph', videoname=videoname, gifname=gifname, halfwayname=halfwayname, quartername=quartername) }}";
 
                 var node = document.createTextNode("Proceed to morph");
                 finish_link.appendChild(node);

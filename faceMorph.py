@@ -175,6 +175,7 @@ def morph(personPic, cartoonPic, num_frames):
     video_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.mp4")
     gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.gif")
     halfway_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "halfway.jpg")
+    quarter_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "quarter.jpg")
 
     
     # Creates mp4 of morphing from person to cartoon
@@ -190,7 +191,6 @@ def morph(personPic, cartoonPic, num_frames):
             # Read array of corresponding points
             points1 = readPoints(personPath + '.txt')
             points2 = readPoints(os.path.join(os.path.join(CARTOON_FOLDER, os.path.basename("text")), cartoonPic) + '.txt')
-            #print(len(points2), len(points1))
             points = []
 
             # Compute weighted average point coordinates
@@ -225,6 +225,9 @@ def morph(personPic, cartoonPic, num_frames):
             out.write(finalImage)
 
             # Write the halfway image
+            if i == halfway_frames // 4:
+                cv2.imwrite(quarter_name, finalImage)
+            
             if i == halfway_frames // 2:
                 cv2.imwrite(halfway_name, finalImage)
 
