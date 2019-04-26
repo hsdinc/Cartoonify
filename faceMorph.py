@@ -176,6 +176,7 @@ def morph(personPic, cartoonPic, num_frames):
     gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.gif")
     halfway_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "halfway.jpg")
     quarter_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "quarter.jpg")
+    threequarter_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "threequarter.jpg")
 
     
     # Creates mp4 of morphing from person to cartoon
@@ -230,6 +231,9 @@ def morph(personPic, cartoonPic, num_frames):
             
             if i == halfway_frames // 2:
                 cv2.imwrite(halfway_name, finalImage)
+
+            if i == (3 * halfway_frames) // 4:
+                cv2.imwrite(threequarter_name, finalImage)
 
         else: 
             # Write frames in reverse to output
