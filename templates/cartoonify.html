@@ -11,33 +11,36 @@
             <img src="{{ url_for('download_file', filename=gifname) }}"></img>
             <br>
             <br>
-            <table class="image" align="center">
+            <table class="image" align="center" width="100%">
+                <col style="width:30%">
+                <col style="width:40%">
+                <col style="width:30%">
                 <tr>
                     <td>
-                        <p>Quarter Image:</p>
+                        <p>25% Morphed:</p>
                         <img src="{{ url_for('download_file', filename=quartername)}}" width="250">
                     </td>
                     <td>
-                        <p>Halfway Image:</p>
+                        <p>50% Morphed:</p>
                         <img src="{{ url_for('download_file', filename=halfwayname)}}" width="250">
                     </td>
                     <td>
-                        <p>Three Quarters Image:</p>
+                        <p>75% Morphed:</p>
                         <img src="{{ url_for('download_file', filename=threequartername)}}" width="250">
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <br>
-                        <a href="{{ url_for('download_file', filename=quartername) }}"><button class='btn btn-default'>Download Quarter Image</button></a>
+                        <a href="{{ url_for('download_file', filename=quartername) }}"><button class='btn btn-default'>Download 25% Image</button></a>
                     </td>
                     <td>
                         <br>
-                        <a href="{{ url_for('download_file', filename=halfwayname) }}"><button class='btn btn-default'>Download Halfway Image</button></a>
+                        <a href="{{ url_for('download_file', filename=halfwayname) }}"><button class='btn btn-default'>Download 50% Image</button></a>
                     </td>
                     <td>
                         <br>
-                        <a href="{{ url_for('download_file', filename=threequartername) }}"><button class='btn btn-default'>Download Three Quarters Image</button></a>
+                        <a href="{{ url_for('download_file', filename=threequartername) }}"><button class='btn btn-default'>Download 75% Image</button></a>
                     </td>
                 </tr>
             </table>
