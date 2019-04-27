@@ -9,7 +9,7 @@ try:
 except:
     pass
 
-from moviepy.editor import *
+from moviepy.editor import VideoFileClip
 import numpy as np
 import cv2
 import sys
@@ -160,8 +160,6 @@ def morph(personPic, cartoonPic, numFrames):
     img1 = cv2.imread(personPath)
     img2 = cv2.imread(cartoonPath)
 
-    print(cartoonPath)
-
     # Convert Mat to float data type
     img1 = np.float32(img1)
     img2 = np.float32(img2)
@@ -238,7 +236,7 @@ def morph(personPic, cartoonPic, numFrames):
             out.write(imgArray[numFrames - 1 - i])
 
         # Yield a status update
-        yield "data:" + str((i + 1) / numFrames * 100) + "\n\n"
+        yield "data:" + str(int((i + 1) / numFrames * 100)) + "\n\n"
     
     out.release()
 
