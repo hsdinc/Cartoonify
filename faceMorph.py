@@ -22,21 +22,22 @@ UPLOAD_FOLDER = os.path.basename('uploads')
 MORPH_FOLDER = os.path.basename('facemorph')
 CARTOON_FOLDER = os.path.basename("static")
 
-# Read points from text file
-def readPoints(path) :
+
+def readPoints(path):
+    """ Reads points from text file and puts them into an array """
     # Create an array of points.
     points = []
     # Read points
-    with open(path) as file :
-        for line in file :
+    with open(path) as file:
+        for line in file:
             x, y = line.split()
             points.append((int(x), int(y)))
 
     return points
 
-# Apply affine transform calculated using srcTri and dstTri to src and
-# output an image of size.
-def applyAffineTransform(src, srcTri, dstTri, size) :
+
+def applyAffineTransform(src, srcTri, dstTri, size):
+    """ Applies the affine transform calculated using srcTri and dstTri to src and outputs an image of size. """
     
     # Given a pair of triangles, find the affine transform.
     warpMat = cv2.getAffineTransform(np.float32(srcTri), np.float32(dstTri))
@@ -47,8 +48,8 @@ def applyAffineTransform(src, srcTri, dstTri, size) :
     return dst
 
 
-# Warps and alpha blends triangular regions from img1 and img2 to img
-def morphTriangle(img1, img2, img, t1, t2, t, alpha) :
+def morphTriangle(img1, img2, img, t1, t2, t, alpha):
+    """ Warps and alpha blends triangular regions from img1 and img2 to img """
 
     # Find bounding rectangle for each triangle
     r1 = cv2.boundingRect(np.float32([t1]))
@@ -83,7 +84,10 @@ def morphTriangle(img1, img2, img, t1, t2, t, alpha) :
     # Copy triangular region of the rectangular patch to the output image
     img[r[1]:r[1]+r[3], r[0]:r[0]+r[2]] = img[r[1]:r[1]+r[3], r[0]:r[0]+r[2]] * ( 1 - mask ) + imgRect * mask
 
+
 def facialLandmarks(image, fileName, clickedPoints):
+    """ Takes image as input, name of person's image, and extra clicked points and determines their facial features. 
+    The list of 80 facial feature points is written to a text file and saved. """
     # initialize dlib's face detector (HOG-based) and then create
     # the facial landmark predictor
     detector = dlib.get_frontal_face_detector()
@@ -128,8 +132,10 @@ def facialLandmarks(image, fileName, clickedPoints):
         file.write(str(shape))
         file.close()
 
-# opens face.txt, removes "[", "]", "." and saves it to output file
+
 def parse(fileName):
+    """ Parses the text file of facial feature points to make it the correct format 
+    and saves that to a new text file """
     f = open("face.txt")
     simple = f.read()
     openBrace = simple.replace("[", "")
@@ -141,11 +147,13 @@ def parse(fileName):
     close.write(period)
 
 def resizeImage(imagePath):
+    """ Resizes the given image to be 600x800 """
     image = cv2.imread(imagePath)
     image = cv2.resize(image, (600, 800))
     cv2.imwrite(imagePath, image)
 
 def createTextFile(personPic, extraPoints):
+    """ Finds the facial landmarks of the person's picture and creates a text file of these landmark points """
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     img1 = cv2.imread(personPath)
 
@@ -154,6 +162,9 @@ def createTextFile(personPic, extraPoints):
     parse(personPath)
 
 def morph(personPic, cartoonPic, numFrames):
+    """ Takes in the person's photo and selected cartoon and morphs them together. The morph is released as
+    a GIF, mp4, and different stages of morphing (25%, 50%, 75%). The morph GIF and mp4 are created with the 
+    frames specified by numFrames. """
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     cartoonPath = os.path.join(os.path.join(CARTOON_FOLDER, os.path.basename("images")), cartoonPic)
@@ -174,7 +185,6 @@ def morph(personPic, cartoonPic, numFrames):
     halfwayName = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "halfway.jpg")
     threequarterName = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "threequarter.jpg")
 
-    
     # Creates mp4 of morphing from person to cartoon
     out = cv2.VideoWriter(videoName, cv2.VideoWriter_fourcc(*'mp4v'), 20, (600, 800))
 
@@ -221,13 +231,15 @@ def morph(personPic, cartoonPic, numFrames):
 
             out.write(finalImage)
 
-            # Write the halfway image
+            # Write the 25% morphed image
             if i == halfwayFrames // 4:
                 cv2.imwrite(quarterName, finalImage)
-            
+
+            # Write the 50% morphed image
             if i == halfwayFrames // 2:
                 cv2.imwrite(halfwayName, finalImage)
 
+            # Write the 75% morphed image
             if i == (3 * halfwayFrames) // 4:
                 cv2.imwrite(threequarterName, finalImage)
 
