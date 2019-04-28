@@ -4,40 +4,76 @@
 <script src="/static/js/jquery-3.1.1.js"></script>
 
 <div class="jumbotron text-center">
-    <h1>Cartoonify</h1>
+    <h1>Cartoonify!</h1>
     
-    <h2>Click the image below to designate the required points</h2>
+    <h2>Click your image below to designate the following points in this order:</h2>
+    <h3>(Directions are from the image's point of view)</h3>
+    <table class="image" align="center" width="100%">
+      <col style="width:25%">
+      <col style="width:25%">
+      <col style="width:25%">
+      <col style="width:25%">
+      <tr>
+        <td>
+          <p>Left Ear:</p>
+          <img src= "{{ url_for('static', filename='examples/' + 'hueyRed.jpg') }}" width="250">
+        </td>
+        <td>
+          <p>Neck:</p>
+          <img src= "{{ url_for('static', filename='examples/' + 'hueyBlue.jpg') }}" width="250">
+        </td>
+        <td>
+          <p>Right Shoulder:</p>
+          <img src= "{{ url_for('static', filename='examples/' + 'hueyYellow.jpg') }}" width="250">
+        </td>
+        <td>
+          <p>Left Shoulder:</p>
+          <img src= "{{ url_for('static', filename='examples/' + 'hueyGreen.jpg') }}" width="250">
+        </td>
+      </tr>
+    </table>
+
+    <br>
+    <br>
     <canvas id = "points_image" width = "600" height = "800"></canvas>
+    <br>
+    <br>
+    <button onclick = "clearPoints()" class='btn btn-default'>Clear points</button>
+    <br>
+    <br>  
 
-    <h3>Left and right are from the person in the picture's perspective</h3>
     <form id = "points_form" action="{{ url_for('add_points', filename=filename) }}" method="post" enctype="multipart/form-data">
-        <span class="btn btn-default btn-file">
-            Left Ear X:<br>
-            <input type="text" name="leftearX" value=""><br>
-            Left Ear Y:<br>
-            <input type="text" name="leftearY" value=""><br>
-            Neck X:<br>
-            <input type="text" name="neckX" value=""><br>
-            Neck Y:<br>
-            <input type="text" name="neckY" value=""><br>
-            Right Shoulder X:<br>
-            <input type="text" name="rightshoulderX" value=""><br>
-            Right Shoulder Y:<br>
-            <input type="text" name="rightshoulderY" value=""><br>
-            Left Shoulder X:<br>
-            <input type="text" name="leftshoulderX" value=""><br>
-            Left Shoulder Y:<br>
-            <input type="text" name="leftshoulderY" value=""><br>
-        </span>
-
-        <input type="submit" value="Confirm points" class="btn btn-primary">
+      <input id="submitbutton" type="submit" value="Confirm points" class="btn btn-primary">
+      <input type="text" style = "display:none;" name="leftearX" value=""><br>
+      <input type="text" style = "display:none;" name="leftearY" value=""><br>
+      <input type="text" style = "display:none;" name="neckX" value=""><br>
+      <input type="text" style = "display:none;" name="neckY" value=""><br>
+      <input type="text" style = "display:none;" name="rightshoulderX" value=""><br>
+      <input type="text" style = "display:none;" name="rightshoulderY" value=""><br>
+      <input type="text" style = "display:none;" name="leftshoulderX" value=""><br>
+      <input type="text" style = "display:none;" name="leftshoulderY" value=""><br>
     </form>    
 
     
     <script language = "Javascript">
         var canvas = document.getElementById("points_image");
+        var clear = document.getElementById("clear");
         var context = canvas.getContext('2d');
         var form = document.getElementById("points_form");
+
+        function clearPoints() {
+          // Clear the form
+          for (var i = 0; i < form.elements.length; i++) {
+              textinput = form.elements[i];
+
+              if (textinput.id !== "submitbutton") {
+                  textinput.value = null;
+              }
+          }
+
+          // Redraw the canvas
+          context.drawImage(image, 0, 0);
+        }
 
         image = new Image();
         image.src = "{{ url_for('add_points', filename = filename)}}"
@@ -57,6 +93,35 @@
                 if (textinput.value === "" && textinput.name.slice(-1) === "X") {
                     textinput.value = x;
                     form.elements[i + 1].value = y;
+
+                    // Choose the color of the point based on which point we are choosing
+                    switch(i) {
+                        // Left ear
+                        case 1:
+                            context.fillStyle = "#FF0000";
+                            break;
+                        
+                        // Neck
+                        case 3:
+                            context.fillStyle = "#0000FF";
+                            break;
+
+                        // Right shoulder
+                        case 5:
+                            context.fillStyle = "#FFFF00";
+                            break;
+
+                        // Left shoulder
+                        case 7:
+                            context.fillStyle = "#00FF00";
+                            break;
+
+                        default:
+                            break;
+                    }
+                    
+                    // Create a rectangular point centered at where the user clicked
+                    context.fillRect(x - 5, y - 5, 11, 11);
                     break;
                 }
             }

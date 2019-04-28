@@ -2,6 +2,20 @@
 *.gif
 *.mp4
 
+# face.txt
+face.txt
+
+# Image files in uploads or facemorph
+uploads/*.jpg
+uploads/*.png
+facemorph/*.jpg
+
+# Text files in uploads
+uploads/*.txt
+
+# DS stores
+*.DS_Store
+
 # Model file
 # shape_predictor_68_face_landmarks.dat
 

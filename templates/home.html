@@ -1,9 +1,124 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+
 <div class="jumbotron text-center">
-  <h1>Welcome To Cartoonify</h1>
-  <p class="lead">Cartoonify yourself with your favorite cartoon characters!</p>
+  <h1>Welcome To Cartoonify!</h1>
+  <p class="lead">Morph yourself with your favorite cartoon characters!</p>
   <a href="/cartoonify" class="btn btn-primary btn-lg">Cartoonify!</a>
+    <h2>Check out some examples!</h2>
+      <table class="image" align="center">
+        <tr>
+          <td>
+            <p>Brad Pitt</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'brad_pitt.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Morphed!</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'brad_pittjimmyhalfway.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Jimmy Neutron</p>
+            <img src= "{{ url_for('static', filename='images/' + 'jimmy.jpg') }}" height="400" width="300">
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+
+      <table class="image" align="center">
+        <tr>
+          <td>
+            <p>Tiffany</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'tiffany.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Morphed!</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'tiffanymulanhalfway.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Mulan</p>
+            <img src= "{{ url_for('static', filename='images/' + 'mulan.jpg') }}" height="400" width="300">
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+
+      <table class="image" align="center">
+        <tr>
+          <td>
+            <p>Huey</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'huey.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Morphed!</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'hueyaladdinhalfway.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Aladdin</p>
+            <img src= "{{ url_for('static', filename='images/' + 'aladdin.jpg') }}" height="400" width="300">
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+
+      <table class="image" align="center">
+        <tr>
+          <td>
+            <p>Athena</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'athena.png') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Morphed!</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'athenaednahalfway.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Edna</p>
+            <img src= "{{ url_for('static', filename='images/' + 'edna.jpg') }}" height="400" width="300">
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+
+      <table class="image" align="center">
+        <tr>
+          <td>
+            <p>Nisha</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'nisha.png') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Morphed!</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'nishaannahalfway.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Anna</p>
+            <img src= "{{ url_for('static', filename='images/' + 'anna.jpg') }}" height="400" width="300">
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+
+      <table class="image" align="center">
+        <tr>
+          <td>
+            <p>Hazal</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'hazal.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Morphed!</p>
+            <img src= "{{ url_for('static', filename='examples/' + 'hazaltianahalfway.jpg') }}" height="400" width="300">
+          </td>
+          <td>
+            <p>Tiana</p>
+            <img src= "{{ url_for('static', filename='images/' + 'tiana.jpg') }}" height="400" width="300">
+          </td>
+        </tr>
+      </table>
+
+  </div>
 </div>
 {% endblock %}

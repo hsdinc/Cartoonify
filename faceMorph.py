@@ -9,7 +9,7 @@ try:
 except:
     pass
 
-from moviepy.editor import *
+from moviepy.editor import VideoFileClip
 import numpy as np
 import cv2
 import sys
@@ -39,10 +39,10 @@ def readPoints(path) :
 def applyAffineTransform(src, srcTri, dstTri, size) :
     
     # Given a pair of triangles, find the affine transform.
-    warpMat = cv2.getAffineTransform( np.float32(srcTri), np.float32(dstTri) )
+    warpMat = cv2.getAffineTransform(np.float32(srcTri), np.float32(dstTri))
     
     # Apply the Affine Transform just found to the src image
-    dst = cv2.warpAffine( src, warpMat, (size[0], size[1]), None, flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT_101 )
+    dst = cv2.warpAffine(src, warpMat, (size[0], size[1]), None, flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT_101)
 
     return dst
 
@@ -60,12 +60,10 @@ def morphTriangle(img1, img2, img, t1, t2, t, alpha) :
     t2Rect = []
     tRect = []
 
-
     for i in range(0, 3):
         tRect.append(((t[i][0] - r[0]),(t[i][1] - r[1])))
         t1Rect.append(((t1[i][0] - r1[0]),(t1[i][1] - r1[1])))
         t2Rect.append(((t2[i][0] - r2[0]),(t2[i][1] - r2[1])))
-
 
     # Get mask by filling triangle
     mask = np.zeros((r[3], r[2], 3), dtype = np.float32)
@@ -155,42 +153,41 @@ def createTextFile(personPic, extraPoints):
     facialLandmarks(img1, personPath, extraPoints)
     parse(personPath)
 
-def morph(personPic, cartoonPic, num_frames):
+def morph(personPic, cartoonPic, numFrames):
     # Read images
     personPath = os.path.join(UPLOAD_FOLDER, personPic)
     cartoonPath = os.path.join(os.path.join(CARTOON_FOLDER, os.path.basename("images")), cartoonPic)
     img1 = cv2.imread(personPath)
     img2 = cv2.imread(cartoonPath)
 
-    print(cartoonPath)
-
     # Convert Mat to float data type
     img1 = np.float32(img1)
     img2 = np.float32(img2)
 
     # Create an array for the morph images
-    img_array = []
+    imgArray = []
 
     # Create file names for morph video and gif
-    video_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.mp4")
-    gif_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.gif")
-    halfway_name = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "halfway.jpg")
+    videoName = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.mp4")
+    gifName = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "morph.gif")
+    quarterName = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "quarter.jpg")
+    halfwayName = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "halfway.jpg")
+    threequarterName = os.path.join(MORPH_FOLDER, personPic.split(".")[0] + cartoonPic.split(".")[0] + "threequarter.jpg")
 
     
     # Creates mp4 of morphing from person to cartoon
-    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 20, (600, 800))
+    out = cv2.VideoWriter(videoName, cv2.VideoWriter_fourcc(*'mp4v'), 20, (600, 800))
 
     # Note the halfway point of the frames
-    halfway_frames = num_frames // 2
+    halfwayFrames = numFrames // 2
 
-    for i in range(0, num_frames):
-        if i < halfway_frames:
-            alpha = i / halfway_frames
+    for i in range(0, numFrames):
+        if i < halfwayFrames:
+            alpha = i / halfwayFrames
 
             # Read array of corresponding points
             points1 = readPoints(personPath + '.txt')
             points2 = readPoints(os.path.join(os.path.join(CARTOON_FOLDER, os.path.basename("text")), cartoonPic) + '.txt')
-            #print(len(points2), len(points1))
             points = []
 
             # Compute weighted average point coordinates
@@ -220,25 +217,31 @@ def morph(personPic, cartoonPic, num_frames):
 
             # Create result and write to output mp4
             finalImage = np.uint8(imgMorph)
-            img_array.append(finalImage)
+            imgArray.append(finalImage)
 
             out.write(finalImage)
 
             # Write the halfway image
-            if i == halfway_frames // 2:
-                cv2.imwrite(halfway_name, finalImage)
+            if i == halfwayFrames // 4:
+                cv2.imwrite(quarterName, finalImage)
+            
+            if i == halfwayFrames // 2:
+                cv2.imwrite(halfwayName, finalImage)
+
+            if i == (3 * halfwayFrames) // 4:
+                cv2.imwrite(threequarterName, finalImage)
 
         else: 
             # Write frames in reverse to output
-            out.write(img_array[num_frames - 1 - i])
+            out.write(imgArray[numFrames - 1 - i])
 
         # Yield a status update
-        yield "data:" + str((i + 1) / num_frames * 100) + "\n\n"
+        yield "data:" + str(int((i + 1) / numFrames * 100)) + "\n\n"
     
     out.release()
 
     # Creates gif of morphing from mp4
-    clip = (VideoFileClip(video_name))
-    clip.write_gif(gif_name)
+    clip = (VideoFileClip(videoName))
+    clip.write_gif(gifName)
 
     yield "data:stop\n\n"

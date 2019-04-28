@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, after_this_request, Response, stream_with_context
+from flask import Flask, render_template, request, send_file, after_this_request, Response, stream_with_context, url_for, send_from_directory
 from faceMorph import resizeImage, createTextFile, morph
 import os
 
@@ -59,19 +59,23 @@ def choosecartoon(filename):
     videoname = f.split(".")[0] + cartoon.split(".")[0] + "morph.mp4"
     gifname = f.split(".")[0] + cartoon.split(".")[0] + "morph.gif"
     halfwayname = f.split(".")[0] + cartoon.split(".")[0] + "halfway.jpg"
+    quartername = f.split(".")[0] + cartoon.split(".")[0] + "quarter.jpg"
+    threequartername = f.split(".")[0] + cartoon.split(".")[0] + "threequarter.jpg"
 
-    return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, gifname = gifname, halfwayname = halfwayname)
+    return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, gifname = gifname, halfwayname = halfwayname, quartername = quartername, threequartername = threequartername)
 
 @app.route('/load/<path:filename>/<path:cartoonname>')
 def load(filename, cartoonname):
     return Response(morph(filename, cartoonname, NUM_FRAMES), mimetype= 'text/event-stream')
 
-@app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>')
-def show_morph(videoname, gifname, halfwayname):
+@app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>/<path:quartername>/<path:threequartername>')
+def show_morph(videoname, gifname, halfwayname, quartername, threequartername):
     videoname = os.path.join(MORPH_FOLDER, videoname)
     gifname = os.path.join(MORPH_FOLDER, gifname)
     halfwayname = os.path.join(MORPH_FOLDER, halfwayname)
-    return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, init = True)
+    quartername = os.path.join(MORPH_FOLDER, quartername)
+    threequartername = os.path.join(MORPH_FOLDER, threequartername)
+    return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, quartername = quartername, threequartername = threequartername, init = True)
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):
