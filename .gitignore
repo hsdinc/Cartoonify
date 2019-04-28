@@ -2,6 +2,9 @@
 *.gif
 *.mp4
 
+# face.txt
+face.txt
+
 # Image files in uploads or facemorph
 uploads/*.jpg
 uploads/*.png
