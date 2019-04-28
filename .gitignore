@@ -1,6 +1,6 @@
 # Morph videos/gifs
-*.gif
-*.mp4
+facemorph/*.gif
+facemorph/*.mp4
 
 # face.txt
 face.txt
