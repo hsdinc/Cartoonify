@@ -43,7 +43,7 @@
     <br>  
 
     <form id = "points_form" action="{{ url_for('add_points', filename=filename) }}" method="post" enctype="multipart/form-data">
-      <input id="submitbutton" type="submit" value="Confirm points" class="btn btn-primary">
+      <input id="submitbutton" type="submit" value="Confirm points" class="btn btn-primary" disabled>
       <input type="text" style = "display:none;" name="leftearX" value=""><br>
       <input type="text" style = "display:none;" name="leftearY" value=""><br>
       <input type="text" style = "display:none;" name="neckX" value=""><br>
@@ -60,6 +60,7 @@
         var clear = document.getElementById("clear");
         var context = canvas.getContext('2d');
         var form = document.getElementById("points_form");
+        var submitbutton = document.getElementById("submitbutton");
 
         function clearPoints() {
           // Clear the form
@@ -69,6 +70,9 @@
               if (textinput.id !== "submitbutton") {
                   textinput.value = null;
               }
+
+              // Disable submit button
+              submitbutton.disabled = true;
           }
 
           // Redraw the canvas
@@ -114,6 +118,7 @@
                         // Left shoulder
                         case 7:
                             context.fillStyle = "#00FF00";
+                            submitbutton.disabled = false;
                             break;
 
                         default:

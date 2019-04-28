@@ -24,45 +24,59 @@ def cartoonify(filename = None):
 
 @app.route('/addpoints', methods=['POST'])
 def upload_image():
-    image = request.files['image']
-    f = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
-    image.save(f)
-    resizeImage(f)
+    try:
+        image = request.files['image']
 
-    return render_template('addpoints.html', filename=f)
+        # Check file extension and return error page if not .jpg or .png
+        extension = image.filename.split(".")[-1]
+        if extension != "png" and extension != "jpg":
+            return render_template('error.html')
+
+        f = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+        image.save(f)
+        resizeImage(f)
+        
+        return render_template('addpoints.html', filename=f)
+
+    except:
+        return render_template('error.html')
 
 @app.route('/addpoints/<path:filename>', methods=['POST'])
 def add_points(filename):
-    # Find extra points from form
-    extraPoints = []
-    extraPoints += [(int(request.form['leftearX']), int(request.form['leftearY']))]
-    extraPoints += [(int(request.form['neckX']), int(request.form['neckY']))]
-    extraPoints += [(int(request.form['rightshoulderX']), int(request.form['rightshoulderY']))]
-    extraPoints += [(int(request.form['leftshoulderX']), int(request.form['leftshoulderY']))]
+    try:
+        # Find extra points from form
+        extraPoints = []
+        extraPoints += [(int(request.form['leftearX']), int(request.form['leftearY']))]
+        extraPoints += [(int(request.form['neckX']), int(request.form['neckY']))]
+        extraPoints += [(int(request.form['rightshoulderX']), int(request.form['rightshoulderY']))]
+        extraPoints += [(int(request.form['leftshoulderX']), int(request.form['leftshoulderY']))]
 
-    # Create a text file representing the points to be used for the uploaded picture and morph
-    f = os.path.basename(filename)
-    createTextFile(f, extraPoints)
+        # Create a text file representing the points to be used for the uploaded picture and morph
+        f = os.path.basename(filename)
+        createTextFile(f, extraPoints)
 
-    return render_template('choosecartoon.html', filename = filename)
+        return render_template('choosecartoon.html', filename = filename)
 
-@app.route('/choosecartoon/<path:filename>', methods=['GET'])
-def choosecartoon_start(filename):
-    images = os.listdir(os.path.join(app.static_folder, "images"))
-    return send_file(filename, as_attachment=True, mimetype='image/jpg')
+    except:
+        return render_template('error.html')
 
 @app.route('/choosecartoon/<path:filename>', methods=['POST'])
 def choosecartoon(filename):
-    cartoon = request.form['cartoon']
-   
-    f = os.path.basename(filename)
-    videoname = f.split(".")[0] + cartoon.split(".")[0] + "morph.mp4"
-    gifname = f.split(".")[0] + cartoon.split(".")[0] + "morph.gif"
-    halfwayname = f.split(".")[0] + cartoon.split(".")[0] + "halfway.jpg"
-    quartername = f.split(".")[0] + cartoon.split(".")[0] + "quarter.jpg"
-    threequartername = f.split(".")[0] + cartoon.split(".")[0] + "threequarter.jpg"
+    try:
+        cartoon = request.form['cartoon']
+    
+        f = os.path.basename(filename)
+        videoname = f.split(".")[0] + cartoon.split(".")[0] + "morph.mp4"
+        gifname = f.split(".")[0] + cartoon.split(".")[0] + "morph.gif"
+        halfwayname = f.split(".")[0] + cartoon.split(".")[0] + "halfway.jpg"
+        quartername = f.split(".")[0] + cartoon.split(".")[0] + "quarter.jpg"
+        threequartername = f.split(".")[0] + cartoon.split(".")[0] + "threequarter.jpg"
 
-    return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, gifname = gifname, halfwayname = halfwayname, quartername = quartername, threequartername = threequartername)
+        return render_template('loading.html', filename = f, cartoonname = cartoon, videoname = videoname, 
+            gifname = gifname, halfwayname = halfwayname, quartername = quartername, threequartername = threequartername)
+
+    except:
+        return render_template('error.html')
 
 @app.route('/load/<path:filename>/<path:cartoonname>')
 def load(filename, cartoonname):
@@ -70,12 +84,17 @@ def load(filename, cartoonname):
 
 @app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>/<path:quartername>/<path:threequartername>')
 def show_morph(videoname, gifname, halfwayname, quartername, threequartername):
-    videoname = os.path.join(MORPH_FOLDER, videoname)
-    gifname = os.path.join(MORPH_FOLDER, gifname)
-    halfwayname = os.path.join(MORPH_FOLDER, halfwayname)
-    quartername = os.path.join(MORPH_FOLDER, quartername)
-    threequartername = os.path.join(MORPH_FOLDER, threequartername)
-    return render_template('cartoonify.html', videoname = videoname, gifname = gifname, halfwayname = halfwayname, quartername = quartername, threequartername = threequartername, init = True)
+    try:
+        videoname = os.path.join(MORPH_FOLDER, videoname)
+        gifname = os.path.join(MORPH_FOLDER, gifname)
+        halfwayname = os.path.join(MORPH_FOLDER, halfwayname)
+        quartername = os.path.join(MORPH_FOLDER, quartername)
+        threequartername = os.path.join(MORPH_FOLDER, threequartername)
+        return render_template('cartoonify.html', videoname = videoname, gifname = gifname, 
+            halfwayname = halfwayname, quartername = quartername, threequartername = threequartername, init = True)
+
+    except:
+        return render_template('error.html')
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):
@@ -83,36 +102,11 @@ def add_points_image(filename):
 
 @app.route('/cartoonify/<path:filename>', methods=['GET', 'POST'])
 def download_file(filename):
-    #file_handle = open(filename, 'r')
-    #text_file_handle = open(filename + ".txt", 'r')
-    #@after_this_request
-    #def remove_file(response):
-    #    try:
-    #        os.remove(filename)
-    #        os.remove(filename + ".txt")
-    #        file_handle.close()
-    #        text_file_handle.close()
-    #    except Exception as error:
-    #        app.logger.error("Error removing or closing downloaded file handle" + str(error))
-    #    return response
     return send_file(filename, as_attachment=True)
 
 @app.route('/cartoonify')
-def tryagain(filename):
-    #file_handle = open(filename, 'r')
-    #text_file_handle = open(filename + ".txt", 'r')
-    #@after_this_request
-    #def remove_file(response):
-    #    try:
-    #        os.remove(filename)
-    #        os.remove(filename + ".txt")
-    #        file_handle.close()
-    #        text_file_handle.close()
-    #    except Exception as error:
-    #        app.logger.error("Error removing or closing downloaded file handle" + str(error))
-    #    return response
-    return render_template('cartoonify.html', init=True)
-
+def tryagain():
+    return render_template('cartoonify.html', init=False)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="/static/js/jquery-3.1.1.js"></script>
 	<script>
       var source = new EventSource("{{ url_for('load', filename = filename, cartoonname = cartoonname)}}");
       source.onmessage = function(event) {
@@ -13,13 +14,16 @@
           
           // Once morph images are finished generating, notify the user that the gif is being generated
           if (event.data == 100) {
-              var update_text = document.createElement("p");
-              var node = document.createTextNode("Morph images generated. Generating GIF. This might take a minute.");
+              var update_text = document.getElementById("update_text");
+              update_text.style.display = "block";
+              
+              //var update_text = document.createElement("p");
+              //var node = document.createTextNode("Morph images generated. Generating GIF. This might take a minute.");
               var bar = document.getElementById("bar");
               $('.progress-bar').css('width', (event.data) + '%').attr('aria-valuenow', event.data);
               $('.progress-bar-label').text((event.data) +'%');
-              update_text.appendChild(node);
-              element.appendChild(update_text);
+              //update_text.appendChild(node);
+              //element.appendChild(update_text);
               bar.style.display = "none";
               
           }
@@ -28,12 +32,15 @@
           else if (event.data == "stop"){
               source.close();
 
-              var finish_link = document.createElement("a");
-              finish_link.href = "{{ url_for('show_morph', videoname=videoname, gifname=gifname, halfwayname=halfwayname, quartername=quartername, threequartername=threequartername) }}";
+              var finish_link = document.getElementById("finish_link");
+              finish_link.style.display = "block";
+              //var finish_link = document.createElement("a");
+              //finish_link.href = "{{ url_for('show_morph', videoname=videoname, gifname=gifname, halfwayname=halfwayname, quartername=quartername, threequartername=threequartername) }}";
+              //finish_link.class = "btn btn-primary btn-lg";
 
-              var node = document.createTextNode("Proceed to morph");
-              finish_link.appendChild(node);
-              element.appendChild(finish_link);
+              //var node = document.createTextNode("Proceed to morph");
+              //finish_link.appendChild(node);
+              //element.appendChild(finish_link);
           }
 
           // Update the progress bar with data
@@ -53,10 +60,11 @@
         <span class="progress-bar-label">0%</span>
       </div>
     </div>
+    
+    <p id = "update_text" style = "display:none;">Morph images generated. Generating GIF. This might take a minute.</p>
+    <a id = "finish_link" href = "{{ url_for('show_morph', videoname=videoname, gifname=gifname, halfwayname=halfwayname, quartername=quartername, threequartername=threequartername) }}" 
+    style = "display:none; width: 10%; margin-left: 45%;" class="btn btn-primary btn-lg">Proceed to morph</a>
 
-    <div id="completion">
-
-    </div>
   </div>
 </body>
 </html>

@@ -52,7 +52,7 @@
             <a href="{{ url_for('download_file', filename=gifname) }}"><button class='btn btn-default'>Download GIF</button></a>
             <br>
             <br>
-            <a href="{{ url_for('tryagain', filename=gifname) }}"><button class='btn btn-default'>Try again!</button></a>
+            <a href="{{ url_for('tryagain') }}"><button class='btn btn-default'>Try again!</button></a>
         </div>
         
     {% else %}
@@ -60,28 +60,28 @@
 
         <form action="/addpoints" method="post" enctype="multipart/form-data">
             <span class="btn btn-default btn-file">
-                <input type="file" name="image">
+              <input type="file" name="image">
             </span>
             <input type="submit" value="Upload your image" class="btn btn-primary">
         </form>
             <h3>Upload a front facing photo (examples below)</h3>
             <h5>Images work best if they have dimensions 600x800</h5>
             <table class="image" align="center" width="100%">
-                    <col style="width:33%">
-                    <col style="width:34%">
-                    <col style="width:33%">
-                    <tr>
-                      <td>
-                        <img src= "{{ url_for('static', filename='examples/' + 'huey.jpg') }}" width="250">
-                      </td>
-                      <td>
-                        <img src= "{{ url_for('static', filename='examples/' + 'miguel.jpg') }}" width="250">
-                      </td>
-                      <td>
-                        <img src= "{{ url_for('static', filename='examples/' + 'tiffanyPortrait.jpg') }}" width="250">
-                      </td>
-                    </tr>
-                  </table>
+              <col style="width:33%">
+              <col style="width:34%">
+              <col style="width:33%">
+              <tr>
+                <td>
+                  <img src= "{{ url_for('static', filename='examples/' + 'huey.jpg') }}" width="250">
+                </td>
+                <td>
+                  <img src= "{{ url_for('static', filename='examples/' + 'miguel.jpg') }}" width="250">
+                </td>
+                <td>
+                  <img src= "{{ url_for('static', filename='examples/' + 'tiffanyPortrait.jpg') }}" width="250">
+                </td>
+              </tr>
+            </table>
     {% endif %}
 </div>
 
