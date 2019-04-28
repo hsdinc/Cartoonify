@@ -12,18 +12,23 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
+    """ Brings user to homepage"""
     return render_template('home.html')
 
 @app.route('/about')
 def about():
+    """ Brings user to about page"""
     return render_template('about.html')
 
 @app.route('/cartoonify')
 def cartoonify(filename = None):
+    """ Brings user to first part of cartoonify process (uploading their image)"""
     return render_template('cartoonify.html')
 
 @app.route('/addpoints', methods=['POST'])
 def upload_image():
+    """ Saves an uploaded image in the uploads folder, resizes it, and redirects
+    user to the addpoints page."""
     try:
         image = request.files['image']
 
@@ -43,6 +48,9 @@ def upload_image():
 
 @app.route('/addpoints/<path:filename>', methods=['POST'])
 def add_points(filename):
+    """ Parses extra points provided by user and creates a text file representing the
+    facial keypoints of their uploaded image (plus the extra points they added). Redirects
+    the user to the choosecartoon page."""
     try:
         # Find extra points from form
         extraPoints = []
@@ -62,6 +70,8 @@ def add_points(filename):
 
 @app.route('/choosecartoon/<path:filename>', methods=['POST'])
 def choosecartoon(filename):
+    """ Takes in a user's cartoon choice and redirects them to the loading screen
+    for their morph."""
     try:
         cartoon = request.form['cartoon']
     
@@ -80,10 +90,15 @@ def choosecartoon(filename):
 
 @app.route('/load/<path:filename>/<path:cartoonname>')
 def load(filename, cartoonname):
+    """ Runs the morph/gif writing process and returns information about how the morph
+    in an HTML response to be parsed in loading.html"""
     return Response(morph(filename, cartoonname, NUM_FRAMES), mimetype= 'text/event-stream')
 
 @app.route('/cartoonifyfinished/<path:videoname>/<path:gifname>/<path:halfwayname>/<path:quartername>/<path:threequartername>')
 def show_morph(videoname, gifname, halfwayname, quartername, threequartername):
+    """ Redirects user to the final stage of the cartoonify page, in which they can 
+    view and download their morph as a gif or mp4, or the quarter, halfway, and 
+    three-quarters stages of the moprh as jpgs"""
     try:
         videoname = os.path.join(MORPH_FOLDER, videoname)
         gifname = os.path.join(MORPH_FOLDER, gifname)
@@ -98,14 +113,19 @@ def show_morph(videoname, gifname, halfwayname, quartername, threequartername):
 
 @app.route('/addpoints/<path:filename>', methods=['GET'])
 def add_points_image(filename):
+    """ Serves the image the user uploaded to the addpoints page"""
     return send_file(filename, as_attachment=True, mimetype='image/jpg')
 
 @app.route('/cartoonify/<path:filename>', methods=['GET', 'POST'])
 def download_file(filename):
+    """ Serves one of the downloadable files at the final stage of 
+    the cartoonify page"""
     return send_file(filename, as_attachment=True)
 
 @app.route('/cartoonify')
 def tryagain():
+    """ Reroutes user back to the starting cartoonify page from the
+    final cartoonify page."""
     return render_template('cartoonify.html', init=False)
 
 if __name__ == '__main__':
