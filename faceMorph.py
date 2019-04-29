@@ -146,11 +146,13 @@ def parse(fileName):
     close.write(" ")
     close.write(period)
 
+
 def resizeImage(imagePath):
     """ Resizes the given image to be 600x800 """
     image = cv2.imread(imagePath)
     image = cv2.resize(image, (600, 800))
     cv2.imwrite(imagePath, image)
+
 
 def createTextFile(personPic, extraPoints):
     """ Finds the facial landmarks of the person's picture and creates a text file of these landmark points """
@@ -160,6 +162,7 @@ def createTextFile(personPic, extraPoints):
     # Find facial landmarks of selfie and create text file of landmark points
     facialLandmarks(img1, personPath, extraPoints)
     parse(personPath)
+
 
 def morph(personPic, cartoonPic, numFrames):
     """ Takes in the person's photo and selected cartoon and morphs them together. The morph is released as
