@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<script src="/static/js/jquery-3.1.1.js"></script>
+
+<div class="jumbotron text-center">
+    <h1>Uh oh, looks like we ran into an error!</h1>
+    <img src= "{{ url_for('static', filename='spongebob_error.gif') }}">
+    <br>
+    <br>
+    <p> Try running through the process from the beginning again. Make sure you're uploading a .png or .jpg and picking your points correctly!</p>
+    <a href="/" class="btn btn-primary btn-lg">Go back home</a>
+</div>
+
+
+{% endblock %}
