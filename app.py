@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, send_file, after_this_request, Response, stream_with_context, url_for, send_from_directory
 from faceMorph import resizeImage, createTextFile, morph
 import os
+import random
 
 app = Flask(__name__)
+
+# SUPPORTED_TYPES is a list of supported file extensions for upload
+SUPPORTED_TYPES = ["bmp", "dib", "jpeg", "jpg", "jpe", "jp2", "png", "pbm"
+    "pgm", "ppm", "sr", "ras", "tiff", "tif", "hdr", "pic", "heic"]
 
 # NUM_FRAMES is the number of frames to be created for the gif/mp4. Half of these frames will be the morph in reverse
 NUM_FRAMES = 66
@@ -25,6 +30,15 @@ def cartoonify(filename = None):
     """ Brings user to first part of cartoonify process (uploading their image) """
     return render_template('cartoonify.html')
 
+def generate_random_string(length):
+    """ Generate a random string of digits from 0-9 of a designated length"""
+    s = ""
+    for i in range(length):
+        num = random.randint(0, 9)
+        s += str(num)
+
+    return s
+
 @app.route('/addpoints', methods=['POST'])
 def upload_image():
     """ Saves an uploaded image in the uploads folder, resizes it, and redirects
@@ -33,11 +47,16 @@ def upload_image():
         image = request.files['image']
 
         # Check file extension and return error page if not .jpg or .png
-        extension = image.filename.split(".")[-1]
-        if extension != "png" and extension != "jpg":
-            return render_template('error.html')
+        fnamesplit = image.filename.split(".")
+        name = fnamesplit[0]
+        extension = fnamesplit[-1]
 
-        f = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+        if extension not in SUPPORTED_TYPES:
+            return render_template('fileerror.html', extension = extension, types = SUPPORTED_TYPES)
+
+        f = name + generate_random_string(6) + "." + extension
+
+        f = os.path.join(app.config['UPLOAD_FOLDER'], f)
         image.save(f)
         resizeImage(f)
         
