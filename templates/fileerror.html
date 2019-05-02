@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<script src="/static/js/jquery-3.1.1.js"></script>
+
+<div class="jumbotron text-center">
+  <h1>Unsupported file type!</h1>
+  <img src= "{{ url_for('static', filename='spongebob_error.gif') }}">
+  <br>
+  <br>
+  <p> You uploaded a {{extension}} file. See list of supported file types below:</p>
+  <p>
+  {% for type in types %}
+    .{{type}}
+  {% endfor %}
+  </p>
+  <br>
+  <a href="/cartoonify" class="btn btn-primary btn-lg">Try again</a>
+</div>
+
+{% endblock %}

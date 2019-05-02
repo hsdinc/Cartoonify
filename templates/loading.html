@@ -14,8 +14,12 @@
           
           // Once morph images are finished generating, notify the user that the gif is being generated
           if (event.data == 100) {
+              // Make update text and loading gif visible
               var update_text = document.getElementById("update_text");
               update_text.style.display = "block";
+              
+              var loading_gif = document.getElementById("loading_gif");
+              loading_gif.style.display = "block";
               
               var bar = document.getElementById("bar");
               $('.progress-bar').css('width', (event.data) + '%').attr('aria-valuenow', event.data);
@@ -27,6 +31,9 @@
           // Once everything has finished, link the user to the final morph page
           else if (event.data == "stop"){
               source.close();
+
+              var loading_gif = document.getElementById("loading_gif");
+              loading_gif.style.display = "none";
 
               var finish_link = document.getElementById("finish_link");
               finish_link.style.display = "block";
@@ -51,6 +58,7 @@
     </div>
     
     <p id = "update_text" style = "display:none;">Morph images generated. Generating GIF. This might take a minute.</p>
+    <img id = "loading_gif" style = "display:none; width: 6%; margin-left: 47%" src= "{{ url_for('static', filename='gary_loading.gif') }}">
     <a id = "finish_link" href = "{{ url_for('show_morph', videoname=videoname, gifname=gifname, halfwayname=halfwayname, quartername=quartername, threequartername=threequartername) }}" 
     class="btn btn-primary btn-lg" style = "display:none;">Proceed to morph</a>
 
