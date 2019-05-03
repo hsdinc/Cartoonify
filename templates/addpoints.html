@@ -38,6 +38,9 @@
     <canvas id = "points_image" width = "600" height = "800"></canvas>
     <br>
     <br>
+    <p id = "shoulderwarning" style = "display:none;">Uh-oh, it looks like you might've switched the left and right shoulders!
+    Remember that left and right are from the photo subject's perspective.</p>
+    <br>
     <button onclick = "clearPoints()" class='btn btn-default'>Clear points</button>
     <br>
     <br>  
@@ -61,8 +64,12 @@
         var context = canvas.getContext('2d');
         var form = document.getElementById("points_form");
         var submitbutton = document.getElementById("submitbutton");
+        var warning = document.getElementById("shoulderwarning");
 
         function clearPoints() {
+          // Hide the warning
+          warning.style.display = "none";
+
           // Clear the form
           for (var i = 0; i < form.elements.length; i++) {
               textinput = form.elements[i];
@@ -117,6 +124,11 @@
 
                         // Left shoulder
                         case 7:
+                            // If left shoulder has a lower X value, warn the user that their points might be off
+                            if (x < form.elements[i - 2].value) {
+                                warning.style.display = "block";
+                            }
+
                             context.fillStyle = "#00FF00";
                             submitbutton.disabled = false;
                             break;
