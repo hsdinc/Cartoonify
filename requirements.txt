@@ -29,7 +29,7 @@ moviepy==1.0.0
 numpy==1.16.2
 opencv-python==4.1.0.25
 pathspec==0.5.9
-Pillow==6.0.0
+Pillow==6.2.0
 proglog==0.1.9
 python-dateutil==2.8.0
 PyYAML==3.13
